@@ -40,19 +40,33 @@ const typeDefs = gql`
     lyrics: String!
   }
 
+  input UpdateUserInput {
+    username: String
+    email: String
+    password: String
+  }
+
   type Query {
-    user(id: ID!): User
-    library(id: ID!): Library
-    song(id: ID!): Song
-    users: [User!]!
-    libraries: [Library!]!
-    songs: [Song!]!
+    getUserById(id: ID!): User
+    getAllUsers: [User!]!
+    getLibraryById(id: ID!): Library
+    getAllLibraries: [Library!]!
+    getSongById(id: ID!): Song
+    getAllSongs: [Song!]!
   }
 
   type Mutation {
     createUser(input: CreateUserInput!): User
+    updateUser(id: ID!, input: UpdateUserInput!): User
+    deleteUser(id: ID!): User
     createLibrary(input: CreateLibraryInput!): Library
+    updateLibrary(id: ID!, input: CreateLibraryInput!): Library
+    deleteLibrary(id: ID!): Library
     createSong(input: CreateSongInput!): Song
+    updateSong(id: ID!, input: CreateSongInput!): Song
+    deleteSong(id: ID!): Song
+    addSongToLibrary(libraryId: ID!, songId: ID!): Library
+    removeSongFromLibrary(libraryId: ID!, songId: ID!): Library
   }
 
   extend type User {

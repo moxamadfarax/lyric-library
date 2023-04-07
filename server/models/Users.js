@@ -19,10 +19,12 @@ const usersSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  libraries: {
-    type: Schema.Types.ObjectId,
-    ref: "Library",
-  },
+  libraries: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Library",
+    },
+  ],
 });
 
 usersSchema.pre("save", async function (next) {

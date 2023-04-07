@@ -30,19 +30,6 @@ const resolvers = {
       await user.save();
       return user;
     },
-    updateUser: async (_, { id, input }) => {
-      return await Users.findByIdAndUpdate(id, input, { new: true }).populate(
-        "libraries"
-      );
-    },
-    deleteUser: async (_, { id }) => {
-      return await Users.findByIdAndDelete(id);
-    },
-    createLibrary: async (_, { input }) => {
-      const library = new Library(input);
-      await library.save();
-      return library;
-    },
     updateLibrary: async (_, { id, input }) => {
       return await Library.findByIdAndUpdate(id, input, { new: true }).populate(
         "songs"

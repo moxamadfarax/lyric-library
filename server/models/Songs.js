@@ -14,7 +14,7 @@ const songsSchema = new Schema({
     required: true,
   },
   lyrics: {
-    type: Text,
+    type: String,
     required: true,
   },
 });

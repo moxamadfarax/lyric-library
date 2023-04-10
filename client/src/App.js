@@ -1,14 +1,13 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 
-
 const client = new ApolloClient({
-  uri: '/graphql',
+  uri: "/graphql",
   cache: new InMemoryCache(),
 });
 
@@ -83,6 +82,7 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <Routes>
+
           <Route
             path="/Profile"
             element={<SignIn />}
@@ -98,7 +98,7 @@ function App() {
         </Routes>
       </Router>
     </ApolloProvider>
-  )
+  );
 }
 
 export default App;

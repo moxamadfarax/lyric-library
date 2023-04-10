@@ -23,7 +23,7 @@ const typeDefs = gql`
     lyrics: String!
   }
 
-  input CreateUserInput {
+  input CreateUser {
     username: String!
     email: String!
     password: String!
@@ -56,7 +56,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(input: CreateUserInput!): User
+    createUser(input: CreateUser!): User
     updateUser(id: ID!, input: UpdateUserInput!): User
     deleteUser(id: ID!): User
     createLibrary(input: CreateLibraryInput!): Library

@@ -44,7 +44,7 @@ db.once("open", async () => {
 
     const library2 = await Library.create({
       name: "Classics",
-      songs: [song1._id],
+      songs: [song1._id, song2._id],
     });
 
     // Associate libraries with users

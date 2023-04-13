@@ -46,6 +46,10 @@ const typeDefs = gql`
     password: String
   }
 
+  type Token {
+    token: String!
+  }
+
   type Query {
     getUserById(id: ID!): User
     getAllUsers: [User!]!
@@ -56,7 +60,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(input: CreateUser!): User
+    createUser(input: CreateUser!): Token!
+    login(email: String!, password: String!): Token!
     updateUser(id: ID!, input: UpdateUserInput!): User
     deleteUser(id: ID!): User
     createLibrary(input: CreateLibraryInput!): Library

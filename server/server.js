@@ -7,8 +7,6 @@ const fetch = require("node-fetch");
 
 const apiKey =
   "uoEUuOk0U8vc6uRvdcBOzfQyW4ibieS_vYCJNyEGq_6p_Obx3ASkXu2VcfKIj73G";
-const artistName = "owl city";
-const songTitle = "vanilla";
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");

@@ -1,25 +1,26 @@
 const Users = require("../models/Users");
 const Library = require("../models/Library");
 const Songs = require("../models/Songs");
+const { authMiddleware, signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
-    getUserById: async (_, { id }) => {
+    getUserById: async (_, { id }, context) => {
       return await Users.findById(id).populate("libraries");
     },
-    getAllUsers: async () => {
+    getAllUsers: async (_, __, context) => {
       return await Users.find().populate("libraries");
     },
-    getLibraryById: async (_, { id }) => {
+    getLibraryById: async (_, { id }, context) => {
       return await Library.findById(id).populate("songs");
     },
-    getAllLibraries: async () => {
+    getAllLibraries: async (_, __, context) => {
       return await Library.find().populate("songs");
     },
-    getSongById: async (_, { id }) => {
+    getSongById: async (_, { id }, context) => {
       return await Songs.findById(id);
     },
-    getAllSongs: async () => {
+    getAllSongs: async (_, __, context) => {
       return await Songs.find();
     },
   },
@@ -28,34 +29,86 @@ const resolvers = {
     createUser: async (_, { input }) => {
       const user = new Users(input);
       await user.save();
-      return user;
+      const token = signToken(user);
+      return { user, token };
     },
-    updateLibrary: async (_, { id, input }) => {
+    login: async (_, { email, password }) => {
+      const user = await Users.findOne({ email });
+      if (!user) {
+        throw new Error("No user with that email");
+      }
+
+      const validPassword = await user.isCorrectPassword(password);
+      if (!validPassword) {
+        throw new Error("Incorrect password");
+      }
+
+      const token = signToken(user);
+
+      return { user, token };
+    },
+    createLibrary: async (_, { input }, context) => {
+      const user = authMiddleware(context);
+
+      const library = new Library(input);
+      await library.save();
+      return library;
+    },
+
+    updateLibrary: async (_, { id, input }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
       return await Library.findByIdAndUpdate(id, input, { new: true }).populate(
         "songs"
       );
     },
-    deleteLibrary: async (_, { id }) => {
+    deleteLibrary: async (_, { id }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
       return await Library.findByIdAndDelete(id);
     },
-    createSong: async (_, { input }) => {
+    createSong: async (_, { input }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
       const song = new Songs(input);
       await song.save();
       return song;
     },
-    updateSong: async (_, { id, input }) => {
+    updateSong: async (_, { id, input }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
       return await Songs.findByIdAndUpdate(id, input, { new: true });
     },
-    deleteSong: async (_, { id }) => {
+    deleteSong: async (_, { id }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
       return await Songs.findByIdAndDelete(id);
     },
-    addSongToLibrary: async (_, { libraryId, songId }) => {
+    addSongToLibrary: async (_, { libraryId, songId }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
       const library = await Library.findById(libraryId);
       library.songs.push(songId);
       await library.save();
       return library;
     },
-    removeSongFromLibrary: async (_, { libraryId, songId }) => {
+    removeSongFromLibrary: async (_, { libraryId, songId }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
       const library = await Library.findById(libraryId);
       library.songs.pull(songId);
       await library.save();

@@ -49,9 +49,7 @@ const resolvers = {
     },
     createLibrary: async (_, { input }, context) => {
       const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
-      }
+
       const library = new Library(input);
       await library.save();
       return library;

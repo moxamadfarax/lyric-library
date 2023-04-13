@@ -1,13 +1,28 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import {
     Box,
     Menu,
-    MenuItem
+    MenuItem,
 } from '@mui/material';
 
 
 export default function Libraries({ libraries }) {
+    const [openDialog, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleCloseDialog = () => {
+      setOpen(false);
+    };
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -16,6 +31,7 @@ export default function Libraries({ libraries }) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
     return (
         <Box sx={{
             display: 'flex;',
@@ -63,7 +79,7 @@ export default function Libraries({ libraries }) {
                     <Menu
                         sx={{
                             bgcolor: 'black;',
-                            opacity: 0.3    
+                            opacity: 0.3
                         }}
                         id="demo-positioned-menu"
                         aria-labelledby="demo-positioned-button"
@@ -80,7 +96,28 @@ export default function Libraries({ libraries }) {
                         }}
                     >
                         <MenuItem onClick={handleClose} href={library._id} component={Button}>Open Library</MenuItem>
-                        <MenuItem onClick={handleClose} component={Button}>Edit Library</MenuItem>
+                        <MenuItem onClick={handleClickOpen} component={Button}>Edit Library Name</MenuItem>
+                        <Dialog open={openDialog} onClose={handleCloseDialog}>
+                            <DialogTitle>Edit Library</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Please enter your new library name:
+                                </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="library"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleCloseDialog}>Cancel</Button>
+                                <Button onClick={handleCloseDialog}>Subscribe</Button>
+                            </DialogActions>
+                        </Dialog>
                         <MenuItem onClick={handleClose} component={Button}>Delete Library</MenuItem>
                     </Menu>
                 </Box>

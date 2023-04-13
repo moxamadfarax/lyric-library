@@ -29,8 +29,34 @@ const resolvers = {
     createUser: async (_, { input }) => {
       const user = new Users(input);
       await user.save();
-      return user;
+      const token = signToken(user);
+      return { user, token };
     },
+    login: async (_, { email, password }) => {
+      const user = await Users.findOne({ email });
+      if (!user) {
+        throw new Error("No user with that email");
+      }
+
+      const validPassword = await user.isCorrectPassword(password);
+      if (!validPassword) {
+        throw new Error("Incorrect password");
+      }
+
+      const token = signToken(user);
+
+      return { user, token };
+    },
+    createLibrary: async (_, { input }, context) => {
+      const user = authMiddleware(context);
+      if (!user) {
+        throw new Error("You need to be logged in to perform this action.");
+      }
+      const library = new Library(input);
+      await library.save();
+      return library;
+    },
+
     updateLibrary: async (_, { id, input }, context) => {
       const user = authMiddleware(context);
       if (!user) {

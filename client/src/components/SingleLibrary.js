@@ -13,7 +13,24 @@ import {
     ListItemButton,
 } from '@mui/material';
 
+
+
 import { GET_LIBRARY_BY_ID } from '../utils/query'
+import{ DELETE_SONG } from '../utils/mutation.js';
+
+
+const [deleteSong, { error } ] = useMutation(DELETE_SONG);
+const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try { 
+        const { data } = await deleteSong({
+            variables: { id },
+          });
+    } catch (err) {
+        console.error(err);
+      }
+    }
+
 
 export default function SingleLibrary({ libraries }) {
     let { id } = useParams();
@@ -49,7 +66,7 @@ export default function SingleLibrary({ libraries }) {
                         color: '#1DB954;'
                     }}>{data.getLibraryById.name}</Box>
                     {data.getLibraryById.songs.map((song) => {
-                        return <ListItem sx={{ bgcolor: '#717b91;' }}>
+                        return <ListItem sx={{ bgcolor: '#717b91;' }}  onClick={handleFormSubmit} >
                             <ListItemButton>
                                 <ListItemText primary={song.trackName} secondary={'artist: ' + song.artistName} />
                                 <ListItemIcon sx={{ marginLeft: '30px;' }}>

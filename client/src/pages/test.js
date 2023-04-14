@@ -8,9 +8,14 @@ function Test() {
   const [albumCover, setAlbumCover] = useState("");
   const [songDetails, setSongDetails] = useState({});
 
+  useEffect(() => {
+    setLyrics("");
+    setAlbumCover("");
+    setSongDetails({});
+  }, [songTitle, artistName]);
+
   const handleGetLyrics = () => {
     setIsLoading(true);
-
     fetch(
       `/lyrics?artist=${encodeURIComponent(
         artistName
@@ -20,7 +25,7 @@ function Test() {
       .then((data) => {
         console.log(data);
         setLyrics(data.lyrics);
-        setAlbumCover(data.albumCover);
+        setAlbumCover(data.thumbnail);
         setSongDetails({
           title: data.title,
           artist: data.artist,
@@ -29,12 +34,6 @@ function Test() {
       .catch((err) => console.error(err))
       .finally(() => setIsLoading(false));
   };
-
-  useEffect(() => {
-    setLyrics("");
-    setAlbumCover("");
-    setSongDetails({});
-  }, [songTitle, artistName]);
 
   return (
     <div>

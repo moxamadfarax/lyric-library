@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 
 import { GET_LIBRARY_BY_ID } from "../utils/query";
-import { DELETE_SONG } from "../utils/mutation.js";
+import { REMOVE_SONG_FROM_LIBRARY } from "../utils/mutation.js";
 
 export default function SingleLibrary({ libraries }) {
-  const [deleteSong, { error }] = useMutation(DELETE_SONG);
+  const [deleteSong, { error }] = useMutation(REMOVE_SONG_FROM_LIBRARY);
   let { id } = useParams();
   const { loading, data } = useQuery(GET_LIBRARY_BY_ID, {
     variables: { id: id },

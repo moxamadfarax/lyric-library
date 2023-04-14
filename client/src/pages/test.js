@@ -20,7 +20,7 @@ function Test() {
       .then((data) => {
         console.log(data);
         setLyrics(data.lyrics);
-        setAlbumCover(data.albumCover);
+        setAlbumCover(data.thumbnail);
         setSongDetails({
           title: data.title,
           artist: data.artist,

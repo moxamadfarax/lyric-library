@@ -1,118 +1,155 @@
 const Users = require("../models/Users");
 const Library = require("../models/Library");
 const Songs = require("../models/Songs");
-const { authMiddleware, signToken } = require("../utils/auth");
+
+const { signToken } = require("../utils/auth");
+const { AuthenticationError } = require("apollo-server-express");
 
 const resolvers = {
   Query: {
-    getUserById: async (_, { id }, context) => {
-      return await Users.findById(id).populate("libraries");
+    getUserById: async (_, { id }) => {
+      return await Users.findById(id);
     },
-    getAllUsers: async (_, __, context) => {
-      return await Users.find().populate("libraries");
+    getAllUsers: async () => {
+      return await Users.find();
     },
-    getLibraryById: async (_, { id }, context) => {
-      return await Library.findById(id).populate("songs");
+    getLibraryById: async (_, { id }) => {
+      return await Library.findById(id);
     },
-    getAllLibraries: async (_, __, context) => {
-      return await Library.find().populate("songs");
+    getAllLibraries: async () => {
+      return await Library.find();
     },
-    getSongById: async (_, { id }, context) => {
+    getSongById: async (_, { id }) => {
       return await Songs.findById(id);
     },
-    getAllSongs: async (_, __, context) => {
+    getAllSongs: async () => {
       return await Songs.find();
     },
   },
-
   Mutation: {
-    createUser: async (_, { input }) => {
-      const user = new Users(input);
-      await user.save();
-      const token = signToken(user);
-      return { user, token };
-    },
-    login: async (_, { email, password }) => {
-      const user = await Users.findOne({ email });
-      if (!user) {
-        throw new Error("No user with that email");
+    createUser: async function (parent, { input }) {
+      try {
+        const user = await Users.create(input);
+        const token = signToken(user);
+        return { token, user };
+      } catch (err) {
+        console.log(err);
       }
+    },
+    login: async function (parent, { email, password }) {
+      try {
+        const user = await Users.findOne({ email });
 
-      const validPassword = await user.isCorrectPassword(password);
-      if (!validPassword) {
-        throw new Error("Incorrect password");
-      }
+        if (!user) {
+          throw new AuthenticationError("Invalid credentials");
+        }
 
-      const token = signToken(user);
+        const correctPw = await user.isCorrectPassword(password);
 
-      return { user, token };
-    },
-    createLibrary: async (_, { input }, context) => {
-      const user = authMiddleware(context);
+        if (!correctPw) {
+          throw new AuthenticationError("Invalid credentials");
+        }
 
-      const library = new Library(input);
-      await library.save();
-      return library;
+        const token = signToken(user);
+        return { token, user };
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    addLibraryToUser: async function (parent, { input }, context) {
+      try {
+        const library = await Library.create({
+          ...input,
+          user: context.user ? context.user._id : null,
+        });
+        if (context.user) {
+          await Users.findOneAndUpdate(
+            { _id: context.user._id },
+            { $push: { libraries: library._id } }
+          );
+        }
+        return library;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    updateLibraryName: async function (parent, { id, name }, context) {
+      try {
+        const library = await Library.findOneAndUpdate(
+          { _id: id, user: context.user ? context.user._id : null },
+          { name },
+          { new: true }
+        );
+        if (!library) {
+          throw new Error("Library not found");
+        }
+        return library;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    deleteLibrary: async function (parent, { id }, context) {
+      try {
+        const library = await Library.findOneAndDelete({
+          _id: id,
+          user: context.user ? context.user._id : null,
+        });
+        if (context.user) {
+          await Users.findOneAndUpdate(
+            { _id: context.user._id },
+            { $pull: { libraries: id } }
+          );
+        }
+        if (!library) {
+          throw new Error("Library not found");
+        }
+        return library;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    addSongToLibrary: async function (parent, { libraryId, input }) {
+      console.log(libraryId, input);
+
+      try {
+        const library = await Library.findById(libraryId);
+        if (!library) {
+          throw new Error("Library not found");
+        }
+
+        const newSong = new Songs(input);
+        await newSong.save();
+
+        library.songs.push(newSong);
+        await library.save();
+
+        return library;
+      } catch (err) {
+        console.log(err);
+      }
     },
 
-    updateLibrary: async (_, { id, input }, context) => {
-      const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
+    removeSongFromLibrary: async function (parent, { libraryId, songId }) {
+      try {
+        const library = await Library.findById(libraryId);
+        if (!library) {
+          throw new Error("Library not found");
+        }
+
+        const songIndex = library.songs.findIndex(
+          (song) => song._id.toString() === songId
+        );
+        if (songIndex === -1) {
+          throw new Error("Song not found in library");
+        }
+
+        library.songs.splice(songIndex, 1);
+        await library.save();
+
+        return library;
+      } catch (err) {
+        console.log(err);
       }
-      return await Library.findByIdAndUpdate(id, input, { new: true }).populate(
-        "songs"
-      );
-    },
-    deleteLibrary: async (_, { id }, context) => {
-      const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
-      }
-      return await Library.findByIdAndDelete(id);
-    },
-    createSong: async (_, { input }, context) => {
-      const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
-      }
-      const song = new Songs(input);
-      await song.save();
-      return song;
-    },
-    updateSong: async (_, { id, input }, context) => {
-      const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
-      }
-      return await Songs.findByIdAndUpdate(id, input, { new: true });
-    },
-    deleteSong: async (_, { id }, context) => {
-      const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
-      }
-      return await Songs.findByIdAndDelete(id);
-    },
-    addSongToLibrary: async (_, { libraryId, songId }, context) => {
-      const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
-      }
-      const library = await Library.findById(libraryId);
-      library.songs.push(songId);
-      await library.save();
-      return library;
-    },
-    removeSongFromLibrary: async (_, { libraryId, songId }, context) => {
-      const user = authMiddleware(context);
-      if (!user) {
-        throw new Error("You need to be logged in to perform this action.");
-      }
-      const library = await Library.findById(libraryId);
-      library.songs.pull(songId);
-      await library.save();
-      return library;
     },
   },
 };

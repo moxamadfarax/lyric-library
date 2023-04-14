@@ -14,25 +14,13 @@ import {
 } from "@mui/material";
 
 import { GET_LIBRARY_BY_ID } from "../utils/query";
-import { DELETE_SONG } from "../utils/mutation.js";
 
 export default function SingleLibrary({ libraries }) {
-  const [deleteSong, { error }] = useMutation(DELETE_SONG);
   let { id } = useParams();
   const { loading, data } = useQuery(GET_LIBRARY_BY_ID, {
     variables: { id: id },
   });
 
-  const handleFormSubmit = async (event, id) => {
-    event.preventDefault();
-    try {
-      const { data } = await deleteSong({
-        variables: { id },
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   if (loading === false) {
     console.log(data.getLibraryById);
@@ -76,7 +64,7 @@ export default function SingleLibrary({ libraries }) {
           </Box>
           {data.getLibraryById.songs.map((song) => {
             return (
-              <ListItem sx={{ bgcolor: "#717b91;" }} onClick={handleFormSubmit}>
+              <ListItem sx={{ bgcolor: "#717b91;" }}>
                 <ListItemButton>
                   <ListItemText
                     primary={song.trackName}

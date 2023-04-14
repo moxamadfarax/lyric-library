@@ -8,6 +8,7 @@ import { GET_ALL_LIBRARIES } from '../utils/query'
 
 export default function Profile() {
   const libraries = useQuery(GET_ALL_LIBRARIES);
+
   return (
     <Box
       sx={{

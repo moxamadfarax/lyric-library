@@ -1,6 +1,4 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
 import LyricsIcon from "@mui/icons-material/Lyrics";
 import {
   Box,
@@ -13,18 +11,8 @@ import {
   ListItemButton,
 } from "@mui/material";
 
-import { GET_LIBRARY_BY_ID } from "../utils/query";
 
-export default function SingleLibrary({ libraries }) {
-  let { id } = useParams();
-  const { loading, data } = useQuery(GET_LIBRARY_BY_ID, {
-    variables: { id: id },
-  });
-
-
-  if (loading === false) {
-    console.log(data.getLibraryById);
-  }
+export default function singleLibrary({ singleLibrary, loading }) {
   return (
     <Box
       sx={{
@@ -60,9 +48,9 @@ export default function SingleLibrary({ libraries }) {
               color: "#1DB954;",
             }}
           >
-            {data.getLibraryById.name}
+            {singleLibrary.getLibraryById.name}
           </Box>
-          {data.getLibraryById.songs.map((song) => {
+          {singleLibrary.getLibraryById.songs.map((song) => {
             return (
               <ListItem sx={{ bgcolor: "#717b91;" }}>
                 <ListItemButton>

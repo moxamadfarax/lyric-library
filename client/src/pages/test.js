@@ -18,6 +18,7 @@ function Test() {
     )
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         setLyrics(data.lyrics);
         setAlbumCover(data.albumCover);
         setSongDetails({

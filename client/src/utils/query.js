@@ -6,7 +6,7 @@ export const GET_USER_BY_ID = gql`
       _id
       username
       email
-      libraries {
+      library {
         _id
         name
         songs {
@@ -27,7 +27,7 @@ export const GET_ALL_USERS = gql`
       _id
       username
       email
-      libraries {
+      library {
         _id
         name
         songs {
@@ -47,11 +47,6 @@ export const GET_LIBRARY_BY_ID = gql`
     getLibraryById(id: $id) {
       _id
       name
-      owner {
-        _id
-        username
-        email
-      }
       songs {
         _id
         trackName
@@ -68,18 +63,6 @@ export const GET_ALL_LIBRARIES = gql`
     getAllLibraries {
       _id
       name
-      owner {
-        _id
-        username
-        email
-      }
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
     }
   }
 `;

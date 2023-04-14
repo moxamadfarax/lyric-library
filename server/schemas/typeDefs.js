@@ -58,6 +58,7 @@ const typeDefs = gql`
     createUser(input: CreateUserInput!): Auth
     login(email: String!, password: String!): Auth
     addLibraryToUser(input: CreateLibraryInput!): Library
+    createLibrary(input: CreateLibraryInput!): Library
     updateLibraryName(id: ID!, name: String!): Library
     deleteLibrary(id: ID!): Library
     addSongToLibrary(libraryId: ID!, input: CreateSongInput!): Library

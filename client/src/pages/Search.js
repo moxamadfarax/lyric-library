@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function Test() {
+function Search() {
   const [lyrics, setLyrics] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [songTitle, setSongTitle] = useState("");
@@ -70,5 +70,5 @@ function Test() {
   );
 }
 
-export default Test;
+export default Search;
 

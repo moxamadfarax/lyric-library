@@ -1,20 +1,43 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import ListDivider from '@mui/joy/ListDivider';
+import MoreVert from '@mui/icons-material/MoreVert';
+import Edit from '@mui/icons-material/Edit';
+import DeleteForever from '@mui/icons-material/DeleteForever';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { IconButton } from '@mui/material';
 import {
     Box,
     Menu,
-    MenuItem
+    MenuItem,
 } from '@mui/material';
 
+
 export default function Libraries({ libraries }) {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
+    const openMenu = Boolean(menuAnchorEl);
+    const handleClickMenu = (event) => {
+        setMenuAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleCloseMenu = () => {
+        setMenuAnchorEl(null);
     };
+    const [openDialog, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleCloseDialog = () => {
+      setOpen(false);
+    };
+
     return (
         <Box sx={{
             display: 'flex;',
@@ -51,37 +74,66 @@ export default function Libraries({ libraries }) {
                             display: 'flex;',
                             alignItems: 'center;'
                         }}
-                        id="demo-positioned-button"
-                        aria-controls={open ? 'demo-positioned-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
+                        href={library._id}
                     >
                         {library.name}
                     </Button>
-                    <Menu
-                        sx={{
-                            bgcolor: 'black;',
-                            opacity: 0.3    
-                        }}
-                        id="demo-positioned-menu"
-                        aria-labelledby="demo-positioned-button"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left',
-                        }}
+                    <IconButton
+                        id="positioned-demo-button"
+                        aria-controls={openMenu ? 'positioned-demo-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openMenu ? 'true' : undefined}
+                        variant="outlined"
+                        color="neutral"
+                        onClick={handleClickMenu}
+                        placement="bottom"
                     >
-                        <MenuItem onClick={handleClose} href={library._id} component={Button}>Open Library</MenuItem>
-                        <MenuItem onClick={handleClose} component={Button}>Edit Library</MenuItem>
-                        <MenuItem onClick={handleClose} component={Button}>Delete Library</MenuItem>
-                    </Menu>
+                        <MoreVert />
+                    </IconButton>
+                    <Box sx={{ display: 'flex', alignItems: 'top'}}>
+                        <Menu
+                            id="positioned-demo-menu"
+                            anchorEl={menuAnchorEl}
+                            open={openMenu}
+                            onClose={handleCloseMenu}
+                            aria-labelledby="positioned-demo-button"
+                        >
+                            <MenuItem onClick={handleClickOpen}>
+                                <ListItemDecorator>
+                                    <Edit />
+                                </ListItemDecorator>{' '}
+                                Rename Library
+                            </MenuItem>
+                            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                            <DialogTitle>Edit Library</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Please enter your new library name:
+                                </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="library"
+                                    type="text"
+                                    fullWidth
+                                    variant="standard"
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleCloseDialog}>Cancel</Button>
+                                <Button onClick={handleCloseDialog}>Subscribe</Button>
+                            </DialogActions>
+                        </Dialog>
+                            <ListDivider />
+                            <MenuItem onClick={handleCloseMenu} variant="soft" color="danger">
+                                <ListItemDecorator sx={{ color: 'inherit', }}>
+                                    <DeleteForever />
+                                </ListItemDecorator>{' '}
+                                Delete Library
+                            </MenuItem>
+                        </Menu>
+                    </Box>
                 </Box>
             })}
 

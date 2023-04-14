@@ -7,8 +7,6 @@ const fetch = require("node-fetch");
 
 const apiKey =
   "uoEUuOk0U8vc6uRvdcBOzfQyW4ibieS_vYCJNyEGq_6p_Obx3ASkXu2VcfKIj73G";
-const artistName = "owl city";
-const songTitle = "vanilla";
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
@@ -46,20 +44,27 @@ app.get("/lyrics", (req, res) => {
     .then((res) => res.json())
     .then((data) => {
       const hit = data.response.hits[0];
+      console.log(hit);
       const trackId = hit.result.id;
+      const title = hit.result.title;
+      const artist = hit.result.primary_artist.name;
+      const releaseDate = hit.result.release_date_for_display;
 
       getLyrics({
         apiKey: apiKey,
-        title: hit.result.title,
-        artist: hit.result.primary_artist.name,
+        title: title,
+        artist: artist,
         optimizeQuery: false,
         id: trackId,
       }).then((lyrics) => {
         res.send({
           lyrics: lyrics,
-          artistName: hit.result.primary_artist.name,
-          songTitle: hit.result.title,
-          thumbnail: hit.result.song_art_image_thumbnail_url,
+          artistName: artist,
+          songTitle: title,
+          thumbnail: hit.result.song_art_image_url,
+          title: title,
+          artist: artist,
+          releaseDate: releaseDate,
         });
       });
     })

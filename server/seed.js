@@ -39,11 +39,13 @@ db.once("open", async () => {
 
     const library1 = await Library.create({
       name: "Favorites",
+      owner: user1._id,
       songs: [song1._id, song2._id],
     });
 
     const library2 = await Library.create({
       name: "Classics",
+      owner: user2._id,
       songs: [song1._id, song2._id],
     });
 

@@ -1,76 +1,44 @@
 import { gql } from "@apollo/client";
 
-export const CREATE_USER = gql`
-  mutation CreateUser($input: CreateUser!) {
-    createUser(input: $input) {
-      _id
-      username
-      email
-      password
-      library {
+export const LOGIN_USER = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      token
+      user {
         _id
-        name
-        songs {
+        username
+        email
+        libraries {
           _id
-          trackName
-          artistName
-          songPhoto
-          lyrics
+          name
+          owner {
+            _id
+            username
+            email
+          }
+          songs {
+            _id
+            trackName
+            artistName
+            songPhoto
+            lyrics
+          }
         }
       }
     }
   }
 `;
 
-export const UPDATE_USER = gql`
-  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {
-    updateUser(id: $id, input: $input) {
-      _id
-      username
-      email
-      password
-      library {
-        _id
-        name
-        songs {
-          _id
-          trackName
-          artistName
-          songPhoto
-          lyrics
-        }
-      }
-    }
-  }
-`;
-
-export const DELETE_USER = gql`
-  mutation DeleteUser($id: ID!) {
-    deleteUser(id: $id) {
-      _id
-      username
-      email
-      password
-      library {
-        _id
-        name
-        songs {
-          _id
-          trackName
-          artistName
-          songPhoto
-          lyrics
-        }
-      }
-    }
-  }
-`;
-
-export const CREATE_LIBRARY = gql`
-  mutation CreateLibrary($input: CreateLibraryInput!) {
-    createLibrary(input: $input) {
+export const ADD_LIBRARY_TO_USER = gql`
+  mutation addLibraryToUser($name: String!) {
+    addLibraryToUser(input: { name: $name }) {
       _id
       name
+      owner {
+        _id
+        username
+        email
+      }
       songs {
         _id
         trackName
@@ -82,11 +50,16 @@ export const CREATE_LIBRARY = gql`
   }
 `;
 
-export const UPDATE_LIBRARY = gql`
-  mutation UpdateLibrary($id: ID!, $input: CreateLibraryInput!) {
-    updateLibrary(id: $id, input: $input) {
+export const UPDATE_LIBRARY_NAME = gql`
+  mutation updateLibraryName($id: ID!, $name: String!) {
+    updateLibraryName(id: $id, name: $name) {
       _id
       name
+      owner {
+        _id
+        username
+        email
+      }
       songs {
         _id
         trackName
@@ -99,10 +72,15 @@ export const UPDATE_LIBRARY = gql`
 `;
 
 export const DELETE_LIBRARY = gql`
-  mutation DeleteLibrary($id: ID!) {
+  mutation deleteLibrary($id: ID!) {
     deleteLibrary(id: $id) {
       _id
       name
+      owner {
+        _id
+        username
+        email
+      }
       songs {
         _id
         trackName
@@ -114,47 +92,30 @@ export const DELETE_LIBRARY = gql`
   }
 `;
 
-export const CREATE_SONG = gql`
-  mutation CreateSong($input: CreateSongInput!) {
-    createSong(input: $input) {
-      _id
-      trackName
-      artistName
-      songPhoto
-      lyrics
-    }
-  }
-`;
-
-export const UPDATE_SONG = gql`
-  mutation UpdateSong($id: ID!, $input: CreateSongInput!) {
-    updateSong(id: $id, input: $input) {
-      _id
-      trackName
-      artistName
-      songPhoto
-      lyrics
-    }
-  }
-`;
-
-export const DELETE_SONG = gql`
-  mutation DeleteSong($id: ID!) {
-    deleteSong(id: $id) {
-      _id
-      trackName
-      artistName
-      songPhoto
-      lyrics
-    }
-  }
-`;
-
 export const ADD_SONG_TO_LIBRARY = gql`
-  mutation AddSongToLibrary($libraryId: ID!, $songId: ID!) {
-    addSongToLibrary(libraryId: $libraryId, songId: $songId) {
+  mutation addSongToLibrary(
+    $libraryId: ID!
+    $trackName: String!
+    $artistName: String!
+    $songPhoto: String!
+    $lyrics: String!
+  ) {
+    addSongToLibrary(
+      libraryId: $libraryId
+      input: {
+        trackName: $trackName
+        artistName: $artistName
+        songPhoto: $songPhoto
+        lyrics: $lyrics
+      }
+    ) {
       _id
       name
+      owner {
+        _id
+        username
+        email
+      }
       songs {
         _id
         trackName
@@ -167,16 +128,52 @@ export const ADD_SONG_TO_LIBRARY = gql`
 `;
 
 export const REMOVE_SONG_FROM_LIBRARY = gql`
-  mutation RemoveSongFromLibrary($libraryId: ID!, $songId: ID!) {
+  mutation removeSongFromLibrary($libraryId: ID!, $songId: ID!) {
     removeSongFromLibrary(libraryId: $libraryId, songId: $songId) {
       _id
       name
+      owner {
+        _id
+        username
+        email
+      }
       songs {
         _id
         trackName
         artistName
         songPhoto
         lyrics
+      }
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation createUser($username: String!, $email: String!, $password: String!) {
+    createUser(
+      input: { username: $username, email: $email, password: $password }
+    ) {
+      token
+      user {
+        _id
+        username
+        email
+        libraries {
+          _id
+          name
+          owner {
+            _id
+            username
+            email
+          }
+          songs {
+            _id
+            trackName
+            artistName
+            songPhoto
+            lyrics
+          }
+        }
       }
     }
   }

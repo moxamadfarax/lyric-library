@@ -20,11 +20,13 @@ import {
 } from '@mui/material';
 
 import { DELETE_LIBRARY } from '../utils/mutation'
+import { UPDATE_LIBRARY_NAME } from '../utils/mutation'
 
 
 export default function Libraries({ libraries }) {
     /*------      mutations      -----*/
     const [deleteLibrary, { error }] = useMutation(DELETE_LIBRARY);
+    const [updateLibraryName, { er }] = useMutation(UPDATE_LIBRARY_NAME);
 
 
     /*-----     Current Libraries state     -----*/
@@ -42,16 +44,26 @@ export default function Libraries({ libraries }) {
         event.preventDefault();
         setOpen(false);
         setMenuAnchorEl(null);
-        const idArray = libArray.map((oneLib) => {
-            return oneLib._id;
-        })
-        console.log('idArray ', idArray);
-        const index = idArray.indexOf(menuAnchorEl.dataset.libraryid);
-        setLibArray((currentArray) => {
-            const currentArrayCopy = [...currentArray];
-            currentArrayCopy[index] = { ...currentArrayCopy[index], name: newLibName }
-            return currentArrayCopy;
-        })
+        try {
+            const idArray = libArray.map((oneLib) => {
+                return oneLib._id;
+            })
+            const index = idArray.indexOf(menuAnchorEl.dataset.libraryid);
+            setLibArray((currentArray) => {
+                const currentArrayCopy = [...currentArray];
+                currentArrayCopy[index] = { ...currentArrayCopy[index], name: newLibName }
+                return currentArrayCopy;
+            })
+            await updateLibraryName({
+                variables: {  
+                    id: menuAnchorEl.dataset.libraryid,
+                    name: newLibName,
+                  }
+            })
+        } catch (err) {
+            console.error(err);
+            console.error(er);
+        }
 
     }
     /*-----    Menu State    -----*/

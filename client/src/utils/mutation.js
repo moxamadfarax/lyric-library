@@ -1,29 +1,24 @@
 import { gql } from "@apollo/client";
 
+export const CREATE_USER = gql`
+  mutation createUser($username: String!, $email: String!, $password: String!) {
+    createUser(
+      input: { username: $username, email: $email, password: $password }
+    ) {
+      token
+      user {
+        _id
+      }
+    }
+  }
+`;
+
 export const LOGIN_USER = gql`
-  mutation login($email: String!, $password: String!) {
+  mutation Mutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
       user {
         _id
-        username
-        email
-        libraries {
-          _id
-          name
-          owner {
-            _id
-            username
-            email
-          }
-          songs {
-            _id
-            trackName
-            artistName
-            songPhoto
-            lyrics
-          }
-        }
       }
     }
   }
@@ -160,16 +155,6 @@ export const REMOVE_SONG_FROM_LIBRARY = gql`
         songPhoto
         lyrics
       }
-    }
-  }
-`;
-
-export const CREATE_USER = gql`
-  mutation createUser($username: String!, $email: String!, $password: String!) {
-    createUser(
-      input: { username: $username, email: $email, password: $password }
-    ) {
-      token
     }
   }
 `;

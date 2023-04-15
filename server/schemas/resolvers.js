@@ -1,9 +1,9 @@
 const Users = require("../models/Users");
 const Library = require("../models/Library");
 const Songs = require("../models/Songs");
-
-const { signToken } = require("../utils/auth");
 const { AuthenticationError } = require("apollo-server-express");
+
+const { signToken, authMiddleware, userCheck } = require("../utils/auth");
 
 const resolvers = {
   Query: {
@@ -27,7 +27,23 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUser: async function (parent, { input }) {
+    createUser: async function (_, { input }) {
+      const { username, password, email } = input;
+      const existingEmail = await Users.findOne({ email });
+      const existingUsername = await Users.findOne({ username });
+      const errors = userCheck(username, password, email);
+
+      if (existingEmail) {
+        throw new Error("Email already in use");
+      }
+      if (existingUsername) {
+        throw new Error("Username has been taken");
+      }
+      if (errors) {
+        console.log(errors);
+        throw new Error(errors);
+      }
+
       try {
         const user = await Users.create(input);
         const token = signToken(user);
@@ -38,46 +54,46 @@ const resolvers = {
     },
 
     login: async function (parent, { email, password }) {
-      try {
-        const user = await Users.findOne({ email });
+      const user = await Users.findOne({ email });
 
-        if (!user) {
-          throw new AuthenticationError("Invalid credentials");
-        }
-
-        const correctPw = await user.isCorrectPassword(password);
-
-        if (!correctPw) {
-          throw new AuthenticationError("Invalid credentials");
-        }
-
-        const token = signToken(user);
-        return { token, user };
-      } catch (err) {
-        console.log(err);
+      if (!user) {
+        throw new AuthenticationError("Invalid credentials");
       }
+
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw new AuthenticationError("Invalid credentials");
+      }
+
+      const token = signToken(user);
+      return { token, user };
     },
+
     addLibraryToUser: async function (parent, { input }, context) {
+      context.auth.checkLoggedIn();
+
       try {
         const library = await Library.create({
           ...input,
-          user: context.user ? context.user._id : null,
+          user: context.user._id,
         });
-        if (context.user) {
-          await Users.findOneAndUpdate(
-            { _id: context.user._id },
-            { $push: { libraries: library._id } }
-          );
-        }
+        await Users.findOneAndUpdate(
+          { _id: context.user._id },
+          { $push: { libraries: library._id } }
+        );
         return library;
       } catch (err) {
         console.log(err);
       }
     },
+
     updateLibraryName: async function (parent, { id, name }, context) {
+      context.auth.checkLoggedIn();
+
       try {
         const library = await Library.findOneAndUpdate(
-          { _id: id, user: context.user ? context.user._id : null },
+          { _id: id, user: context.user._id },
           { name },
           { new: true }
         );
@@ -89,25 +105,27 @@ const resolvers = {
         console.log(err);
       }
     },
+
     createLibrary: async (_, { input }, context) => {
-      //const user = authMiddleware(context);
+      context.auth.checkLoggedIn();
 
       const library = new Library(input);
       await library.save();
       return library;
     },
+
     deleteLibrary: async function (parent, { id }, context) {
+      context.auth.checkLoggedIn();
+
       try {
         const library = await Library.findOneAndDelete({
           _id: id,
-          user: context.user ? context.user._id : null,
+          user: context.user._id,
         });
-        if (context.user) {
-          await Users.findOneAndUpdate(
-            { _id: context.user._id },
-            { $pull: { libraries: id } }
-          );
-        }
+        await Users.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { libraries: id } }
+        );
         if (!library) {
           throw new Error("Library not found");
         }
@@ -116,8 +134,9 @@ const resolvers = {
         console.log(err);
       }
     },
-    addSongToLibrary: async function (parent, { libraryId, input }) {
-      console.log(libraryId, input);
+
+    addSongToLibrary: async function (parent, { libraryId, input }, context) {
+      context.auth.checkLoggedIn();
 
       try {
         const library = await Library.findById(libraryId);
@@ -137,7 +156,12 @@ const resolvers = {
       }
     },
 
-    removeSongFromLibrary: async function (parent, { libraryId, songId }) {
+    removeSongFromLibrary: async function (
+      parent,
+      { libraryId, songId },
+      context
+    ) {
+      context.auth.checkLoggedIn();
       try {
         const library = await Library.findById(libraryId);
         if (!library) {

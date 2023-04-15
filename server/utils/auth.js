@@ -32,12 +32,12 @@ module.exports = {
   },
 
   userCheck: function (username, password, email) {
-    if (_.isEmpty(username)) {
-      return "Username can't be empty";
+    if (_.isEmpty(username) && _.isEmpty(password) && _.isEmpty(email)) {
+      return "Please complete all fields";
     }
 
-    if (!_.inRange(_.size(username), 2, 21)) {
-      return "Username must be between 2 and 21 characters";
+    if (!_.inRange(_.size(username), 8, 31)) {
+      return "Username must be between 8 and 30 characters";
     }
 
     if (_.isEmpty(password)) {

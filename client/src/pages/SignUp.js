@@ -27,7 +27,8 @@ const theme = createTheme({
 });
 
 export default function SignUp() {
-  const [createUser, { loading, error }] = useMutation(CREATE_USER);
+  const [createUser] = useMutation(CREATE_USER);
+  const [error, setError] = React.useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -43,7 +44,7 @@ export default function SignUp() {
       const token = result.data.createUser.token;
       AuthService.login(token);
     } catch (e) {
-      console.log(e);
+      setError(e.message);
     }
   };
 
@@ -66,10 +67,10 @@ export default function SignUp() {
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={{ mt: 4 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid item xs={17}>
                 <TextField
                   required
                   fullWidth
@@ -79,7 +80,7 @@ export default function SignUp() {
                   autoComplete="username"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={17}>
                 <TextField
                   required
                   fullWidth
@@ -89,7 +90,7 @@ export default function SignUp() {
                   autoComplete="email"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={17} sx={{ paddingBottom: "10px" }}>
                 <TextField
                   required
                   fullWidth
@@ -101,6 +102,21 @@ export default function SignUp() {
                 />
               </Grid>
             </Grid>
+            {error && (
+              <Box
+                sx={{
+                  mt: 1,
+                  p: 1,
+                  width: "100%",
+                  backgroundColor: "#9f3640",
+                  color: "white",
+                  textAlign: "center",
+                  borderRadius: "4px",
+                }}
+              >
+                {error}
+              </Box>
+            )}
             <Button
               type="submit"
               fullWidth
@@ -109,9 +125,13 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="center" sx={{ mt: 1 }}>
               <Grid item>
-                <Link href="/signIn" variant="body2">
+                <Link
+                  href="/signIn"
+                  variant="body2"
+                  sx={{ textAlign: "center", textDecoration: "none" }}
+                >
                   Already have an account? Sign in
                 </Link>
               </Grid>

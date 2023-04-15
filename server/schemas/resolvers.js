@@ -49,7 +49,7 @@ const resolvers = {
         const token = signToken(user);
         return { token, user };
       } catch (err) {
-        console.log(err);
+        return err;
       }
     },
 
@@ -57,22 +57,23 @@ const resolvers = {
       const user = await Users.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError("Invalid credentials");
+        throw new Error("Invalid credentials");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError("Invalid credentials");
+        throw new Error("Invalid credentials");
       }
-
-      const token = signToken(user);
-      return { token, user };
+      try {
+        const token = signToken(user);
+        return { token, user };
+      } catch (err) {
+        return err;
+      }
     },
 
-    addLibraryToUser: async function (parent, { input }, context) {
-      context.auth.checkLoggedIn();
-
+    addLibraryToUser: async function (parent, { input }) {
       try {
         const library = await Library.create({
           ...input,
@@ -88,9 +89,7 @@ const resolvers = {
       }
     },
 
-    updateLibraryName: async function (parent, { id, name }, context) {
-      context.auth.checkLoggedIn();
-
+    updateLibraryName: async function (parent, { id, name }) {
       try {
         const library = await Library.findOneAndUpdate(
           { _id: id, user: context.user._id },
@@ -107,16 +106,12 @@ const resolvers = {
     },
 
     createLibrary: async (_, { input }, context) => {
-      context.auth.checkLoggedIn();
-
       const library = new Library(input);
       await library.save();
       return library;
     },
 
     deleteLibrary: async function (parent, { id }, context) {
-      context.auth.checkLoggedIn();
-
       try {
         const library = await Library.findOneAndDelete({
           _id: id,
@@ -136,8 +131,6 @@ const resolvers = {
     },
 
     addSongToLibrary: async function (parent, { libraryId, input }, context) {
-      context.auth.checkLoggedIn();
-
       try {
         const library = await Library.findById(libraryId);
         if (!library) {

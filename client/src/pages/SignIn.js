@@ -27,7 +27,7 @@ const theme = createTheme({
 });
 
 export default function SignInSide() {
-  const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
+  const [loginUser] = useMutation(LOGIN_USER);
   const [showError, setShowError] = React.useState(false); // state to show error message
 
   const handleSubmit = async (event) => {
@@ -132,11 +132,14 @@ export default function SignInSide() {
               >
                 Sign In
               </Button>
-              <Grid container>
-                <Grid item xs></Grid>
+              <Grid container justifyContent="center" sx={{ mt: 1 }}>
                 <Grid item>
-                  <Link href="/SignUp" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link
+                    href="/signUp"
+                    variant="body2"
+                    sx={{ textAlign: "center", textDecoration: "none" }}
+                  >
+                    Don't have an account? Sign up
                   </Link>
                 </Grid>
               </Grid>

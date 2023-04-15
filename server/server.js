@@ -43,8 +43,9 @@ app.get("/lyrics", (req, res) => {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       const hit = data.response.hits[0];
-      console.log(hit);
+
       const trackId = hit.result.id;
       const title = hit.result.title;
       const artist = hit.result.primary_artist.name;

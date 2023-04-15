@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
@@ -18,11 +17,11 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/Search" element={<Search />} />
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/Profile/:id" element={<Library />} />
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/" element={<Search />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Library />} />
         </Routes>
       </Router>
     </ApolloProvider>

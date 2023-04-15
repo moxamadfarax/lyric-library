@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import Navbar from "../components/Navbar";
 
 const theme = createTheme({
   palette: {
@@ -74,6 +75,7 @@ function Search() {
     <ThemeProvider theme={theme}>
     <Grid container>
     <CssBaseline />
+    <Navbar username={"Example Username"} />
       <Grid item xs={12} md={4}>
       <Box
             sx={{

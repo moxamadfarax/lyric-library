@@ -12,6 +12,22 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import CssBaseline from "@mui/material/CssBaseline";
 
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    background: {
+      default: "#121212",
+      paper: "#1f1f1f",
+    },
+    primary: {
+      main: "#90caf9",
+    },
+  },
+});
+
+
+
+
 function Search() {
   const [lyrics, setLyrics] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +71,9 @@ function Search() {
   }, [songTitle, artistName]);
 
   return (
+    <ThemeProvider theme={theme}>
     <Grid container>
+    <CssBaseline />
       <Grid item xs={12} md={6}>
       <Box
             sx={{
@@ -67,7 +85,7 @@ function Search() {
             }}
           >
             <Typography component="h1" variant="h5">
-              Search Lyrics by
+              Search Lyrics
             </Typography>
             <Box
               component="form"
@@ -98,7 +116,7 @@ function Search() {
 
       {isLoading ? renderLoading : console.log("Hello")}
       {!songDetails.title ? (
-        <p>Search Your Song</p>
+        <p></p>
       ) : (
             <Grid item xs={12} md={6}>
             <Card sx={{ maxWidth: 350 }}>
@@ -123,6 +141,7 @@ function Search() {
           )}
             
     </Grid>
+    </ThemeProvider>
   );
 }
 

@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import CssBaseline from "@mui/material/CssBaseline";
 
 const theme = createTheme({
@@ -34,6 +32,7 @@ function Search() {
   const [songTitle, setSongTitle] = useState("");
   const [artistName, setArtistName] = useState("");
   const [albumCover, setAlbumCover] = useState("");
+  const [releaseDate, setReleaseDate] = useState("");
   const [songDetails, setSongDetails] = useState({});
 
   const renderLoading = () => {
@@ -58,6 +57,7 @@ function Search() {
         setSongDetails({
           title: data.title,
           artist: data.artist,
+          releaseDate: data.releaseDate,
         });
       })
       .catch((err) => console.error(err))
@@ -68,13 +68,13 @@ function Search() {
     setLyrics("");
     setAlbumCover("");
     setSongDetails({});
-  }, [songTitle, artistName]);
+  }, [songTitle, artistName, releaseDate]);
 
   return (
     <ThemeProvider theme={theme}>
     <Grid container>
     <CssBaseline />
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={4}>
       <Box
             sx={{
               my: 8,
@@ -85,7 +85,7 @@ function Search() {
             }}
           >
             <Typography component="h1" variant="h5">
-              Search Lyrics
+              Search Song Lyrics
             </Typography>
             <Box
               component="form"
@@ -109,7 +109,23 @@ function Search() {
             onChange={(e) => setArtistName(e.target.value)}
             sx={{ backgroundColor: "#1f1f1f" }}
           />
-          <Button onClick={handleGetLyrics}>Get Lyrics</Button>
+          <Button 
+            onClick={handleGetLyrics}
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2, mb: 2 }}
+            >
+              Get Lyrics
+          </Button>
+          <Button 
+          // onClick={}
+          fullWidth
+          variant="contained"
+          sx={{ mt: 4, mb: 2 }}
+          >
+          Save Song to Library
+          </Button>
+            
           </Box>
           </Box>
         </Grid>
@@ -118,24 +134,40 @@ function Search() {
       {!songDetails.title ? (
         <p></p>
       ) : (
-            <Grid item xs={12} md={6}>
-            <Card sx={{ maxWidth: 350 }}>
+            <Grid item xs={12} md={8}>
+            <Card sx={{ 
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              
+              }}>
             <CardMedia
               component="img"
               alt="Album cover"
-              height="140"
+              height="300"
+              sx={{mt: 5, mb:5, objectFit: "contain"}}
               image={albumCover}
             />
             <CardContent>
-            <Typography variant="h1" component="h2">{songDetails.title}</Typography>
-              <Typography variant="body2" color="text.secondary">
+            <Typography variant="h4" component="h1">{songDetails.title}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Release Date: {songDetails.releaseDate}
+              </Typography>
+              <Typography variant="h5" component= "h2"color="text.secondary" sx={{mt:2, mb: 2}}>
               {songDetails.artist}
               </Typography>
-              <Typography><pre>{lyrics}</pre></Typography>
+              
+              <Box
+              sx={{ 
+                maxWidth: "auto",
+                maxHeight: 300,
+                overflow: 'auto',
+
+                }}
+                >
+                <pre>{lyrics}</pre></Box>
             </CardContent>
-            <CardActions>
-              <Button size="small">Save to Library</Button>
-            </CardActions>
           </Card>
           </Grid>
           )}

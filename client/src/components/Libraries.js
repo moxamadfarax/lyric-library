@@ -137,7 +137,7 @@ export default function Libraries({ libraries }) {
                             display: 'flex;',
                             alignItems: 'center;'
                         }}
-                        href={'Profile/' + library._id}
+                        href={library._id}
                     >
                         {library.name}
                     </Button>

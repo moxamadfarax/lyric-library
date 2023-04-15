@@ -8,6 +8,8 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { AppBar, Toolbar, IconButton } from "@mui/material";
+import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -18,7 +20,8 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     background: {
-      default: "#2f2e32",
+      default: "#383838",
+      paper: "#1f1f1f",
     },
     primary: {
       main: "#90caf9",
@@ -50,7 +53,17 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <AppBar position="static" sx={{ alignItems: "center", height: "5vh" }}>
+        <Toolbar theme={theme}>
+          <IconButton edge="start" color="inherit" aria-label="logo">
+            <LibraryMusicIcon sx={{ color: "#1DB954", fontSize: "1.5em" }} />
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+              LYRIC LIBRARY
+            </Typography>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Container component="main">
         <CssBaseline />
         <Box
           sx={{

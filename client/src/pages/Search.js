@@ -15,7 +15,7 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     background: {
-      default: "#121212",
+      default: "#383838",
       paper: "#1f1f1f",
     },
     primary: {
@@ -109,14 +109,6 @@ function Search() {
               >
                 Get Lyrics
               </Button>
-              <Button
-                // onClick={}
-                fullWidth
-                variant="contained"
-                sx={{ mt: 4, mb: 2 }}
-              >
-                Save Song to Library
-              </Button>
             </Box>
           </Box>
         </Grid>
@@ -156,7 +148,6 @@ function Search() {
                 >
                   {songDetails.artist}
                 </Typography>
-
                 <Box
                   sx={{
                     maxWidth: "auto",

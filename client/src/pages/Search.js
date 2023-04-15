@@ -10,6 +10,8 @@ import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "../components/Navbar";
+import { CREATE_LIBRARY } from "../utils/mutation";
+import { BasicModalDialog } from "../components/Modallibrary";
 
 const theme = createTheme({
   palette: {
@@ -65,6 +67,11 @@ function Search() {
       .finally(() => setIsLoading(false));
   };
 
+ 
+  
+
+
+
   useEffect(() => {
     setLyrics("");
     setAlbumCover("");
@@ -119,8 +126,9 @@ function Search() {
             >
               Get Lyrics
           </Button>
+         
           <Button 
-          // onClick={}
+          // onClick={addSongLibrary}
           fullWidth
           variant="contained"
           sx={{ mt: 4, mb: 2 }}

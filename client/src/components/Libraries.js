@@ -13,6 +13,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IconButton } from '@mui/material';
+import BasicModalDialog  from "./Modallibrary";
 import {
     Box,
     Menu,
@@ -102,6 +103,7 @@ export default function Libraries({ libraries }) {
     }
 
     return (
+        
         <Box sx={{
             display: 'flex;',
             flex: '1;',
@@ -162,6 +164,7 @@ export default function Libraries({ libraries }) {
                             onClose={handleCloseMenu}
                             aria-labelledby="positioned-demo-button"
                         >
+                            
                             <MenuItem Display={''} onClick={handleClickOpen}>
                                 <ListItemDecorator>
                                     <Edit />
@@ -195,10 +198,14 @@ export default function Libraries({ libraries }) {
                                 </ListItemDecorator>{' '}
                             </MenuItem>
                         </Menu>
+                        
                     </Box>
+          
                 </Box>
+                
             })}
 
         </Box>
+        
     )
 }

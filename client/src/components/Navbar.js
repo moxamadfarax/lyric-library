@@ -30,7 +30,7 @@ export default function navbar({ username }) {
                     {username}
                 </Typography>
                 <Stack direction="row" spacing={2}>
-                    <Button color="inherit">Search</Button>
+                    <Button href='/Search' color="inherit">Search</Button>
                     <Button color="inherit">Logout</Button>                    
                 </Stack>
             </Toolbar>

@@ -1,16 +1,18 @@
-import * as React from "react";
+import { useMutation } from "@apollo/client";
 
+import * as React from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import { CREATE_USER } from "../utils/mutation";
+import AuthService from "../utils/auth";
 
 const theme = createTheme({
   palette: {
@@ -25,14 +27,24 @@ const theme = createTheme({
 });
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const [createUser, { loading, error }] = useMutation(CREATE_USER);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-      username: data.get("username"),
-    });
+    try {
+      const result = await createUser({
+        variables: {
+          email: data.get("email"),
+          password: data.get("password"),
+          username: data.get("username"),
+        },
+      });
+      const token = result.data.createUser.token;
+      AuthService.login(token);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

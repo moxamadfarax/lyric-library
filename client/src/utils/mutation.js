@@ -170,27 +170,6 @@ export const CREATE_USER = gql`
       input: { username: $username, email: $email, password: $password }
     ) {
       token
-      user {
-        _id
-        username
-        email
-        libraries {
-          _id
-          name
-          owner {
-            _id
-            username
-            email
-          }
-          songs {
-            _id
-            trackName
-            artistName
-            songPhoto
-            lyrics
-          }
-        }
-      }
     }
   }
 `;

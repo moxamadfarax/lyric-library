@@ -5,7 +5,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
-import Test from "./pages/test";
+import Search from "./pages/Search";
 import Library from "./pages/Library";
 
 const client = new ApolloClient({
@@ -18,9 +18,9 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/signIn" element={<SignIn />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/" element={<Search />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Profile/:id" element={<Library />} />
         </Routes>

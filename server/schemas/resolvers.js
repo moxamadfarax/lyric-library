@@ -14,10 +14,10 @@ const resolvers = {
       return await Users.find();
     },
     getLibraryById: async (_, { id }) => {
-      return await Library.findById(id).populate('songs');
+      return await Library.findById(id).populate("songs");
     },
     getAllLibraries: async () => {
-      return await Library.find().populate('songs');
+      return await Library.find().populate("songs");
     },
     getSongById: async (_, { id }) => {
       return await Songs.findById(id);
@@ -152,6 +152,7 @@ const resolvers = {
 
         library.songs.splice(songIndex, 1);
         await library.save();
+        console.log(library);
 
         return library;
       } catch (err) {

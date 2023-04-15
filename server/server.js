@@ -43,6 +43,7 @@ app.get("/lyrics", (req, res) => {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       const hit = data.response.hits[0];
 
       const trackId = hit.result.id;

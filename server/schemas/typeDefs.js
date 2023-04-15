@@ -36,6 +36,7 @@ const typeDefs = gql`
 
   input CreateLibraryInput {
     name: String!
+    createdAt: String!
   }
 
   input CreateSongInput {

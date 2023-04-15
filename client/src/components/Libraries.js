@@ -23,25 +23,38 @@ import { DELETE_LIBRARY } from '../utils/mutation'
 
 
 export default function Libraries({ libraries }) {
-    let [libArray, setLibArray] = React.useState(libraries)
+    /*------      mutations      -----*/
     const [deleteLibrary, { error }] = useMutation(DELETE_LIBRARY);
-    const deleteLibraryHandler = async () => {
-        console.log(menuAnchorEl.dataset.libraryid);
-        console.log(libArray[0]._id);
-        try {
-            handleCloseMenu();
-            const newArray = libArray.filter((onelib) => onelib._id !== menuAnchorEl.dataset.libraryid)
-            setLibArray(newArray);
-            console.log(libArray)
-            await deleteLibrary({
-                variables: { id: menuAnchorEl.dataset.libraryid}
-            })
-            
-        } catch (err) {
-            console.error(err);
-            console.error(error);
-        }
+
+
+    /*-----     Current Libraries state     -----*/
+    let [libArray, setLibArray] = React.useState(libraries)
+
+
+    /*-----    Remame Library State    -----*/
+    const [newLibName, setNewLibName] = React.useState('');
+    const handleInputChange = (e) => {
+        e.preventDefault();
+        const { target } = e;
+        setNewLibName(target.value);
     }
+    const renameLibraryHandler = async (event) => {
+        event.preventDefault();
+        setOpen(false);
+        setMenuAnchorEl(null);
+        const idArray = libArray.map((oneLib) => {
+            return oneLib._id;
+        })
+        console.log('idArray ', idArray);
+        const index = idArray.indexOf(menuAnchorEl.dataset.libraryid);
+        setLibArray((currentArray) => {
+            const currentArrayCopy = [...currentArray];
+            currentArrayCopy[index] = { ...currentArrayCopy[index], name: newLibName }
+            return currentArrayCopy;
+        })
+
+    }
+    /*-----    Menu State    -----*/
     const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
     const openMenu = Boolean(menuAnchorEl);
     const handleClickMenu = (event) => {
@@ -50,16 +63,31 @@ export default function Libraries({ libraries }) {
     const handleCloseMenu = () => {
         setMenuAnchorEl(null);
     };
-    const [openDialog, setOpen] = React.useState(false);
 
+    /*-----    Dialog Form State    -----*/
+    const [openDialog, setOpen] = React.useState(false);
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleCloseDialog = () => {
-        setMenuAnchorEl(null);
         setOpen(false);
     };
+    /*-----      Delete Library function      -----*/
+    const deleteLibraryHandler = async () => {
+        try {
+            const newArray = libArray.filter((oneLib) => oneLib._id !== menuAnchorEl.dataset.libraryid)
+            setLibArray(newArray);
+            console.log(libArray)
+            await deleteLibrary({
+                variables: { id: menuAnchorEl.dataset.libraryid }
+            })
+
+        } catch (err) {
+            console.error(err);
+            console.error(error);
+        }
+    }
 
     return (
         <Box sx={{
@@ -122,11 +150,10 @@ export default function Libraries({ libraries }) {
                             onClose={handleCloseMenu}
                             aria-labelledby="positioned-demo-button"
                         >
-                            <MenuItem onClick={handleClickOpen}>
+                            <MenuItem Display={''} onClick={handleClickOpen}>
                                 <ListItemDecorator>
                                     <Edit />
                                 </ListItemDecorator>{' '}
-                                Rename Library
                             </MenuItem>
                             <Dialog open={openDialog} onClose={handleCloseDialog}>
                                 <DialogTitle>Edit Library</DialogTitle>
@@ -135,18 +162,18 @@ export default function Libraries({ libraries }) {
                                         Please enter your new library name:
                                     </DialogContentText>
                                     <TextField
-                                        autoFocus
                                         margin="dense"
-                                        id="name"
+                                        id="renamelibrary"
                                         label="library"
                                         type="text"
                                         fullWidth
                                         variant="standard"
+                                        onChange={handleInputChange}
                                     />
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={handleCloseDialog}>Cancel</Button>
-                                    <Button onClick={handleCloseDialog}>Subscribe</Button>
+                                    <Button type='submit' onClick={renameLibraryHandler} >Submit</Button>
                                 </DialogActions>
                             </Dialog>
                             <ListDivider />
@@ -154,7 +181,6 @@ export default function Libraries({ libraries }) {
                                 <ListItemDecorator sx={{ color: 'inherit', }}>
                                     <DeleteForever />
                                 </ListItemDecorator>{' '}
-                                Delete Library
                             </MenuItem>
                         </Menu>
                     </Box>

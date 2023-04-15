@@ -8,9 +8,12 @@
 - Badges
 
 ## Decription
-Lyric Library allows users to make an account to keep up with their favorite song information like lyrics and artist, as well as create playlists.
+We found much value in new technologies as well as previous Technologies used. Our MERN stack application uses React and Material UI for the front end. Server side we’ve taken advantage of GraphQL, Node, and Express. To round it out and tie things together we’ve employed a MongoDB and mongoose database. 
 
-Technologies used: This is a MERN stack application that uses React and Material UI for the front end. Server side we’ve taken advantage of GraphQL, Node, and Express. To round it out and tie things together we’ve employed a MongoDB and mongoose database.
+We've deployed using Heroku.
+
+
+Brad and Christopher found their start in the front end; Christopher implementing material UI and Brad tying remaining elements and semantics together. Mohammed and Shane took charge in the back end; Mohammed setting up the server and schema files while Shane worked on file structure seeding and indexing the schemas. The Challenges we faced such as api issues, incorporating material UI, Faker, node modules, did not define us. Rather our Successes, like front end visual user experience, team flow, tenacious work attitude and timeless final class sessions.
 
 ## Usage!
 // Link to deployed application

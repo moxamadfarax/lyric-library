@@ -14,10 +14,10 @@ const resolvers = {
       return await Users.find();
     },
     getLibraryById: async (_, { id }) => {
-      return await Library.findById(id);
+      return await Library.findById(id).populate('songs');
     },
     getAllLibraries: async () => {
-      return await Library.find();
+      return await Library.find().populate('songs');
     },
     getSongById: async (_, { id }) => {
       return await Songs.findById(id);
@@ -87,6 +87,13 @@ const resolvers = {
       } catch (err) {
         console.log(err);
       }
+    },
+    createLibrary: async (_, { input }, context) => {
+      //const user = authMiddleware(context);
+
+      const library = new Library(input);
+      await library.save();
+      return library;
     },
     deleteLibrary: async function (parent, { id }, context) {
       try {

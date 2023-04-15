@@ -1,10 +1,18 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
 import Navbar from '../components/Navbar';
 import SingleLibrary from '../components/SingleLibrary';
 
-export default function Library({ libraries }) {
+import { GET_LIBRARY_BY_ID } from "../utils/query";
+
+export default function Library() {
+    let { id } = useParams();
+    const singleLibrary = useQuery(GET_LIBRARY_BY_ID, {
+      variables: { id: id },
+    });
     return (
         <Box sx={{
             display: 'flex;',
@@ -19,7 +27,7 @@ export default function Library({ libraries }) {
             minHeight: '100vh;',
             justifyContent: 'center;'
         }}>
-            <SingleLibrary libraries={libraries} />
+            <SingleLibrary singleLibrary={singleLibrary.data} loading={singleLibrary.loading} />
             </Box>
         </Box>
     )

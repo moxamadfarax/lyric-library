@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useMutation } from '@apollo/client';
 import Button from '@mui/material/Button';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 import ListDivider from '@mui/joy/ListDivider';
@@ -18,8 +19,29 @@ import {
     MenuItem,
 } from '@mui/material';
 
+import { DELETE_LIBRARY } from '../utils/mutation'
+
 
 export default function Libraries({ libraries }) {
+    let [libArray, setLibArray] = React.useState(libraries)
+    const [deleteLibrary, { error }] = useMutation(DELETE_LIBRARY);
+    const deleteLibraryHandler = async () => {
+        console.log(menuAnchorEl.dataset.libraryid);
+        console.log(libArray[0]._id);
+        try {
+            handleCloseMenu();
+            const newArray = libArray.filter((onelib) => onelib._id !== menuAnchorEl.dataset.libraryid)
+            setLibArray(newArray);
+            console.log(libArray)
+            await deleteLibrary({
+                variables: { id: menuAnchorEl.dataset.libraryid}
+            })
+            
+        } catch (err) {
+            console.error(err);
+            console.error(error);
+        }
+    }
     const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
     const openMenu = Boolean(menuAnchorEl);
     const handleClickMenu = (event) => {
@@ -31,21 +53,22 @@ export default function Libraries({ libraries }) {
     const [openDialog, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-      setOpen(true);
+        setOpen(true);
     };
-  
+
     const handleCloseDialog = () => {
-      setOpen(false);
+        setMenuAnchorEl(null);
+        setOpen(false);
     };
 
     return (
         <Box sx={{
             display: 'flex;',
-            alignItems: 'center;',
+            flex: '1;',
             flexDirection: 'column;',
-            bgcolor: '#272424;',
+            alignItems: 'center;',
             justifyContent: 'center;',
-            flex: '1;'
+            bgcolor: '#272424;',
         }}>
             <Box sx={{
                 color: 'white;',
@@ -60,7 +83,7 @@ export default function Libraries({ libraries }) {
                 marginBottom: '20px',
                 fontSize: '30px'
             }}>My libraries</Box>
-            {libraries.map((library) => {
+            {libArray.map((library) => {
                 return <Box key={library.id} sx={{
                     display: 'flex;',
                     alignItems: 'center;'
@@ -74,7 +97,7 @@ export default function Libraries({ libraries }) {
                             display: 'flex;',
                             alignItems: 'center;'
                         }}
-                        href={library._id}
+                        href={'Profile/' + library._id}
                     >
                         {library.name}
                     </Button>
@@ -87,10 +110,11 @@ export default function Libraries({ libraries }) {
                         color="neutral"
                         onClick={handleClickMenu}
                         placement="bottom"
+                        data-libraryId={library._id}
                     >
                         <MoreVert />
                     </IconButton>
-                    <Box sx={{ display: 'flex', alignItems: 'top'}}>
+                    <Box sx={{ display: 'flex', alignItems: 'top' }}>
                         <Menu
                             id="positioned-demo-menu"
                             anchorEl={menuAnchorEl}
@@ -105,28 +129,28 @@ export default function Libraries({ libraries }) {
                                 Rename Library
                             </MenuItem>
                             <Dialog open={openDialog} onClose={handleCloseDialog}>
-                            <DialogTitle>Edit Library</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>
-                                    Please enter your new library name:
-                                </DialogContentText>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="name"
-                                    label="library"
-                                    type="text"
-                                    fullWidth
-                                    variant="standard"
-                                />
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleCloseDialog}>Cancel</Button>
-                                <Button onClick={handleCloseDialog}>Subscribe</Button>
-                            </DialogActions>
-                        </Dialog>
+                                <DialogTitle>Edit Library</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Please enter your new library name:
+                                    </DialogContentText>
+                                    <TextField
+                                        autoFocus
+                                        margin="dense"
+                                        id="name"
+                                        label="library"
+                                        type="text"
+                                        fullWidth
+                                        variant="standard"
+                                    />
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleCloseDialog}>Cancel</Button>
+                                    <Button onClick={handleCloseDialog}>Subscribe</Button>
+                                </DialogActions>
+                            </Dialog>
                             <ListDivider />
-                            <MenuItem onClick={handleCloseMenu} variant="soft" color="danger">
+                            <MenuItem data-libraryId={library._id} onClick={deleteLibraryHandler} variant="soft" color="danger">
                                 <ListItemDecorator sx={{ color: 'inherit', }}>
                                     <DeleteForever />
                                 </ListItemDecorator>{' '}

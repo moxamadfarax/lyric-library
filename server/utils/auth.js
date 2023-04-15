@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
+require("dotenv").config();
 
-const secret = "useenv";
+const secret = process.env.JSWT_SECRET;
 const expiration = "2h";
 
 module.exports = {
@@ -22,7 +23,6 @@ module.exports = {
     } catch {
       console.log("Invalid token");
     }
-
     return req;
   },
 

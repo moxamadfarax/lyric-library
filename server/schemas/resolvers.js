@@ -1,7 +1,6 @@
 const Users = require("../models/Users");
 const Library = require("../models/Library");
 const Songs = require("../models/Songs");
-const { AuthenticationError } = require("apollo-server-express");
 
 const { signToken, authMiddleware, userCheck } = require("../utils/auth");
 

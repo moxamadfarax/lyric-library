@@ -4,9 +4,9 @@ const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 const { getLyrics } = require("genius-lyrics-api");
 const fetch = require("node-fetch");
+require("dotenv").config();
 
-const apiKey =
-  "uoEUuOk0U8vc6uRvdcBOzfQyW4ibieS_vYCJNyEGq_6p_Obx3ASkXu2VcfKIj73G";
+const apiKey = process.env.API_KEY;
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");

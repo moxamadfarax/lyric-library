@@ -5,8 +5,11 @@ import { useQuery } from "@apollo/client";
 import Navbar from "../components/Navbar";
 import Libraries from "../components/Libraries";
 import { GET_ALL_LIBRARIES } from "../utils/query";
+import authService from "../utils/auth"
 
 export default function Profile() {
+  const profile = authService.getProfile();
+  console.log(profile);
   const libraries = useQuery(GET_ALL_LIBRARIES);
 
   return (

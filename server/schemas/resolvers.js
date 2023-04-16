@@ -7,24 +7,22 @@ const { signToken, authMiddleware, userCheck } = require("../utils/auth");
 const resolvers = {
   Query: {
     getUserById: async (_, { id }) => {
-      return await Users.findById(id);
-    },
-    getAllUsers: async () => {
-      return await Users.find();
+      return await Users.findById(id).populate("libraries");
     },
     getLibraryById: async (_, { id }) => {
       return await Library.findById(id).populate("songs");
     },
-    getAllLibraries: async () => {
-      return await Library.find().populate("songs");
-    },
     getSongById: async (_, { id }) => {
       return await Songs.findById(id);
     },
-    getAllSongs: async () => {
-      return await Songs.find();
+    getAllUsers: async () => {
+      return await Users.find();
+    },
+    getAllLibraries: async () => {
+      return await Library.find().populate("songs");
     },
   },
+
   Mutation: {
     createUser: async function (_, { input }) {
       const { username, password, email } = input;
@@ -39,10 +37,8 @@ const resolvers = {
         throw new Error("Username has been taken");
       }
       if (errors) {
-        console.log(errors);
         throw new Error(errors);
       }
-
       try {
         const user = await Users.create(input);
         const token = signToken(user);
@@ -52,7 +48,7 @@ const resolvers = {
       }
     },
 
-    login: async function (parent, { email, password }) {
+    login: async function (_, { email, password }) {
       const user = await Users.findOne({ email });
 
       if (!user) {
@@ -72,106 +68,77 @@ const resolvers = {
       }
     },
 
-    addLibraryToUser: async function (parent, { input }) {
-      try {
-        const library = await Library.create({
-          ...input,
-          user: context.user._id,
-        });
-        await Users.findOneAndUpdate(
-          { _id: context.user._id },
-          { $push: { libraries: library._id } }
-        );
-        return library;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    updateLibraryName: async function (parent, { id, name }) {
+    updateLibraryName: async function (_, { id, name }) {
       try {
         const library = await Library.findOneAndUpdate(
-          { _id: id, user: context.user._id },
+          { _id: id },
           { name },
           { new: true }
         );
         if (!library) {
           throw new Error("Library not found");
         }
-        return library;
+        return library.populate("songs");
       } catch (err) {
         console.log(err);
       }
     },
 
-    createLibrary: async (_, { input }, context) => {
+    createLibrary: async (_, { input }) => {
       const library = new Library(input);
       await library.save();
       return library;
     },
 
-    deleteLibrary: async function (parent, { id }, context) {
+    deleteLibrary: async function (_, { libraryId }) {
       try {
-        const library = await Library.findOneAndDelete({
-          _id: id,
-          user: context.user._id,
+        const library = await Library.findOneAndDelete(libraryId);
+        if (!library) {
+          throw new Error("Library not found");
+        }
+        return console.log("Library deleted");
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    addSongToLibrary: async function (_, { libraryId, input }) {
+      try {
+        const library = await Library.findOne({
+          _id: libraryId,
         });
-        await Users.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { libraries: id } }
-        );
         if (!library) {
           throw new Error("Library not found");
         }
-        return library;
+
+        const song = new Songs(input);
+        await song.save();
+        await Library.findByIdAndUpdate(
+          libraryId,
+          { $push: { songs: song._id } },
+          { new: true }
+        );
+        return library.populate("songs");
       } catch (err) {
         console.log(err);
       }
     },
-
-    addSongToLibrary: async function (parent, { libraryId, input }, context) {
+    removeSongFromLibrary: async function (_, { libraryId, songId }) {
       try {
-        const library = await Library.findById(libraryId);
+        const library = await Library.findOne({
+          _id: libraryId,
+        });
         if (!library) {
           throw new Error("Library not found");
         }
 
-        const newSong = new Songs(input);
-        await newSong.save();
-
-        library.songs.push(newSong);
-        await library.save();
-
-        return library;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    removeSongFromLibrary: async function (
-      parent,
-      { libraryId, songId },
-      context
-    ) {
-      context.auth.checkLoggedIn();
-      try {
-        const library = await Library.findById(libraryId);
-        if (!library) {
-          throw new Error("Library not found");
-        }
-
-        const songIndex = library.songs.findIndex(
-          (song) => song._id.toString() === songId
+        await Songs.findByIdAndDelete(songId);
+        await Library.findByIdAndUpdate(
+          libraryId,
+          { $pull: { songs: songId } },
+          { new: true }
         );
-        if (songIndex === -1) {
-          throw new Error("Song not found in library");
-        }
-
-        library.songs.splice(songIndex, 1);
-        await library.save();
-        console.log(library);
-
-        return library;
+        return library.populate("songs");
       } catch (err) {
         console.log(err);
       }

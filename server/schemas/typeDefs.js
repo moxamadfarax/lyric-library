@@ -5,12 +5,12 @@ const typeDefs = gql`
     _id: ID!
     username: String!
     email: String!
-    libraries: [Library!]!
+    libraries: [Library]
   }
 
   type Library {
     _id: ID!
-    name: String!
+    name: String
     owner: User!
     songs: [Song!]!
   }
@@ -36,7 +36,7 @@ const typeDefs = gql`
 
   input CreateLibraryInput {
     name: String!
-    createdAt: String!
+    createdAt: String
   }
 
   input CreateSongInput {

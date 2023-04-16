@@ -7,10 +7,10 @@ const { signToken, authMiddleware, userCheck } = require("../utils/auth");
 const resolvers = {
   Query: {
     getUserById: async (_, { id }) => {
-      return await Users.findById(id);
+      return await Users.findById(id).populate("libraries");
     },
     getAllUsers: async () => {
-      return await Users.find();
+      return await Users.find().populate("libraries");
     },
     getLibraryById: async (_, { id }) => {
       return await Library.findById(id).populate("songs");

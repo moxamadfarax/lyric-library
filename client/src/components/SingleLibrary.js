@@ -3,13 +3,7 @@ import {
   Box,
   List,
 } from "@mui/material";
-
-
 import SingleSong from './SingleSong';
-
-
-
-
 export default function singleLibrary({ singleLibrary, loading, libraryId }) {
 console.log(singleLibrary);
   const [songs, setSongs] = React.useState(singleLibrary.songs);
@@ -23,7 +17,6 @@ console.log(singleLibrary);
       console.error(err);
     }
   }
-
   return (
     <Box
       sx={{
@@ -74,6 +67,5 @@ console.log(singleLibrary);
         </List>
       </Box>
     </Box>
-
   );
 }

@@ -155,7 +155,7 @@ const resolvers = {
     ) {
       context.auth.checkLoggedIn();
       try {
-        const library = await Library.findById(libraryId);
+        const library = await Library.findById(libraryId).populate('songs');
         if (!library) {
           throw new Error("Library not found");
         }

@@ -30,7 +30,7 @@ function Search() {
   const [songTitle, setSongTitle] = useState("");
   const [artistName, setArtistName] = useState("");
   const [albumCover, setAlbumCover] = useState("");
-  const [releaseDate, setReleaseDate] = useState("");
+  const [releaseDate] = useState("");
   const [songDetails, setSongDetails] = useState({});
 
   const renderLoading = () => {

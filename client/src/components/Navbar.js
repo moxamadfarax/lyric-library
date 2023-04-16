@@ -13,8 +13,10 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import MenuIcon from "@mui/icons-material/Menu";
+import authService from "../utils/auth";
 
 export default function Navbar({ username }) {
   const isSmallScreen = useMediaQuery("(max-width:650px)");
@@ -38,6 +40,7 @@ export default function Navbar({ username }) {
 
   // Render links based on screen size
   const renderLinks = () => {
+    const isLoggedIn = authService.loggedIn();
     if (isSmallScreen) {
       return (
         <Drawer
@@ -50,17 +53,33 @@ export default function Navbar({ username }) {
             <ListItem button>
               <ListItemText primary="Search" />
             </ListItem>
-            <ListItem button>
-              <ListItemText primary="Logout" />
-            </ListItem>
+            {!isLoggedIn ? (
+              <ListItem button component={Link} to="/signUp">
+                <ListItemText primary="Sign Up" />
+              </ListItem>
+            ) : (
+              <ListItem button onClick={() => authService.logout()}>
+                <ListItemText primary="Logout" />
+              </ListItem>
+            )}
           </List>
         </Drawer>
       );
     } else {
       return (
         <Stack direction="row" spacing={2}>
-          <Button color="inherit">Search</Button>
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit" component={Link} to="/profile">
+            Profile
+          </Button>
+          {!isLoggedIn ? (
+            <Button color="inherit" component={Link} to="/signUp">
+              Sign Up
+            </Button>
+          ) : (
+            <Button color="inherit" onClick={() => authService.logout()}>
+              Logout
+            </Button>
+          )}
         </Stack>
       );
     }
@@ -69,21 +88,28 @@ export default function Navbar({ username }) {
   return (
     <AppBar position="static">
       <Toolbar theme={theme}>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="logo"
-          sx={{ color: "#1DB954" }}
-        >
-          <LibraryMusicIcon />
-        </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          LYRIC LIBRARY
-        </Typography>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {username}
-        </Typography>
+        <Button component={Link} to="/" edge="start">
+          <IconButton
+            size="large"
+            color="inherit"
+            aria-label="logo"
+            sx={{ color: "#1DB954" }}
+          >
+            <LibraryMusicIcon />
+          </IconButton>
+          <Typography variant="h6" component="div">
+            LYRIC LIBRARY
+          </Typography>
+        </Button>
+        {username && (
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, textAlign: "center" }}
+          >
+            {username}
+          </Typography>
+        )}
         {renderLinks()}
         {isSmallScreen && (
           <IconButton

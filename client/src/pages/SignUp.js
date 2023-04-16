@@ -55,12 +55,14 @@ export default function SignUp() {
     <ThemeProvider theme={theme}>
       <AppBar position="static" sx={{ alignItems: "center", height: "5vh" }}>
         <Toolbar theme={theme}>
-          <IconButton edge="start" color="inherit" aria-label="logo">
-            <LibraryMusicIcon sx={{ color: "#1DB954", fontSize: "1.5em" }} />
-            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
-              LYRIC LIBRARY
-            </Typography>
-          </IconButton>
+          <Link href="/" sx={{ textDecoration: "none", color: "white" }}>
+            <IconButton edge="start" color="inherit" aria-label="logo">
+              <LibraryMusicIcon sx={{ color: "#1DB954", fontSize: "1.5em" }} />
+              <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+                LYRIC LIBRARY
+              </Typography>
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <Container component="main">

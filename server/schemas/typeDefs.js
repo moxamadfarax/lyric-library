@@ -11,7 +11,6 @@ const typeDefs = gql`
   type Library {
     _id: ID!
     name: String!
-    owner: User!
     songs: [Song!]!
   }
 
@@ -36,7 +35,6 @@ const typeDefs = gql`
 
   input CreateLibraryInput {
     name: String!
-    createdAt: String!
   }
 
   input CreateSongInput {
@@ -49,16 +47,14 @@ const typeDefs = gql`
   type Query {
     getUserById(id: ID!): User
     getAllUsers: [User!]!
-    getLibraryById(id: ID!): Library
     getAllLibraries: [Library!]!
+    getLibraryById(id: ID!): Library
     getSongById(id: ID!): Song
-    getAllSongs: [Song!]!
   }
 
   type Mutation {
     createUser(input: CreateUserInput!): Auth
     login(email: String!, password: String!): Auth
-    addLibraryToUser(input: CreateLibraryInput!): Library
     createLibrary(input: CreateLibraryInput!): Library
     updateLibraryName(id: ID!, name: String!): Library
     deleteLibrary(id: ID!): Library

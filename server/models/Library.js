@@ -16,11 +16,6 @@ const librarySchema = new Schema({
       ref: "Songs",
     },
   ],
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "Users",
-//    required: true,
-  },
 });
 
 const Library = model("Library", librarySchema);

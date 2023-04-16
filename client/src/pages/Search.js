@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "../components/Navbar";
+import AuthService from "../utils/auth";
 
 const theme = createTheme({
   palette: {
@@ -59,7 +60,8 @@ function Search() {
       .catch((err) => console.error(err))
       .finally(() => setIsLoading(false));
   };
-
+  let profile = AuthService.getProfile();
+  console.log(profile);
   useEffect(() => {
     setLyrics("");
     setAlbumCover("");

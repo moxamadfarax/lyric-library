@@ -12,13 +12,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.0",
-    "jsonwebtoken": "^8.5.1",
     "apollo-server-express": "^3.6.2",
+    "bcrypt": "^5.0.0",
+    "dotenv": "^16.0.3",
     "express": "^4.17.2",
+    "genius-lyrics-api": "^3.2.0",
     "graphql": "^16.3.0",
-    "mongoose": "^6.1.8",
-    "genius-lyrics-api": "^3.2.0"
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.1.8"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

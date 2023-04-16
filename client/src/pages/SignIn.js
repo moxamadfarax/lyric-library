@@ -1,16 +1,18 @@
 import * as React from "react";
-
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { AppBar, Toolbar, IconButton } from "@mui/material";
+import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../utils/mutation";
+import authService from "../utils/auth";
 
 const theme = createTheme({
   palette: {
@@ -26,18 +28,38 @@ const theme = createTheme({
 });
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const [loginUser] = useMutation(LOGIN_USER);
+  const [showError, setShowError] = React.useState(false);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email");
+    const password = data.get("password");
+    try {
+      const { data } = await loginUser({
+        variables: { email, password },
+      });
+      authService.login(data.login.token);
+    } catch (e) {
+      console.error(e);
+      setShowError(true);
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <AppBar position="static" sx={{ alignItems: "center", height: "5vh" }}>
+        <Toolbar theme={theme}>
+          <IconButton edge="start" color="inherit" aria-label="logo">
+            <LibraryMusicIcon sx={{ color: "#1DB954", fontSize: "1.5em" }} />
+            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+              LYRIC LIBRARY
+            </Typography>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Grid container component="main" sx={{ height: "95vh" }}>
         <CssBaseline />
         <Grid
           item
@@ -69,6 +91,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign In
             </Typography>
+
             <Box
               component="form"
               noValidate
@@ -97,7 +120,21 @@ export default function SignInSide() {
                 autoComplete="current-password"
                 sx={{ backgroundColor: "#1f1f1f" }}
               />
-
+              {showError && (
+                <Box
+                  sx={{
+                    mt: 1,
+                    p: 1,
+                    width: "100%",
+                    backgroundColor: "#9f3640",
+                    color: "white",
+                    textAlign: "center",
+                    borderRadius: "4px",
+                  }}
+                >
+                  Incorrect username or password.
+                </Box>
+              )}
               <Button
                 type="submit"
                 fullWidth
@@ -106,11 +143,14 @@ export default function SignInSide() {
               >
                 Sign In
               </Button>
-              <Grid container>
-                <Grid item xs></Grid>
+              <Grid container justifyContent="center" sx={{ mt: 1 }}>
                 <Grid item>
-                  <Link href="/SignUp" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link
+                    href="/signUp"
+                    variant="body2"
+                    sx={{ textAlign: "center", textDecoration: "none" }}
+                  >
+                    Don't have an account? Sign up
                   </Link>
                 </Grid>
               </Grid>

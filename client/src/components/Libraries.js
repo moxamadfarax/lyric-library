@@ -91,10 +91,10 @@ export default function Libraries({ libraries }) {
             setMenuAnchorEl(null);
             const newArray = libArray.filter((oneLib) => oneLib._id !== menuAnchorEl.dataset.libraryid)
             setLibArray(newArray);
-            console.log(libArray)
             await deleteLibrary({
                 variables: { id: menuAnchorEl.dataset.libraryid }
             })
+            console.log('Deleted library');
 
         } catch (err) {
             console.error(err);

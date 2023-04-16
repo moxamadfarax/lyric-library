@@ -114,12 +114,12 @@ const resolvers = {
       try {
         const library = await Library.findOneAndDelete({
           _id: id,
-          user: context.user._id,
+        //   user: context.user._id,
         });
-        await Users.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { libraries: id } }
-        );
+        // await Users.findOneAndUpdate(
+        //   { _id: context.user._id },
+        //   { $pull: { libraries: id } }
+        // );
         if (!library) {
           throw new Error("Library not found");
         }
@@ -153,7 +153,7 @@ const resolvers = {
       { libraryId, songId },
       context
     ) {
-      context.auth.checkLoggedIn();
+      // context.auth.checkLoggedIn();  
       try {
         const library = await Library.findById(libraryId).populate('songs');
         if (!library) {

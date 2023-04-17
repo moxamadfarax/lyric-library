@@ -1,23 +1,18 @@
 import * as React from "react";
-import {
-  Box,
-  List,
-} from "@mui/material";
-import SingleSong from './SingleSong';
+import { Box, List } from "@mui/material";
+import SingleSong from "./SingleSong";
 
-export default function OneLibrary({ singleLibrary, libraryId }) {
-
-
+export default function SingleLibrary({ singleLibrary, libraryId }) {
   const [songs, setSongs] = React.useState(singleLibrary.getLibraryById.songs);
   const removeSong = async (songId) => {
     try {
-      const newSongList = songs.filter(song => song._id !== songId);
-      console.log('newSongList', newSongList);
+      const newSongList = songs.filter((song) => song._id !== songId);
+      console.log("newSongList", newSongList);
       setSongs(newSongList);
     } catch (err) {
       console.error(err);
     }
-  }
+  };
   return (
     <Box
       sx={{
@@ -28,11 +23,13 @@ export default function OneLibrary({ singleLibrary, libraryId }) {
         justifyContent: "center;",
       }}
     >
-      <Box sx={{
-        display: 'flex;',
-        flexDirection: 'column;',
-        alignItems: 'center;'
-      }}>
+      <Box
+        sx={{
+          display: "flex;",
+          flexDirection: "column;",
+          alignItems: "center;",
+        }}
+      >
         <Box
           sx={{
             marginBottom: "20px;",
@@ -63,7 +60,8 @@ export default function OneLibrary({ singleLibrary, libraryId }) {
                 song={song}
                 removeSong={removeSong}
                 libraryId={libraryId}
-              />)
+              />
+            );
           })}
         </List>
       </Box>

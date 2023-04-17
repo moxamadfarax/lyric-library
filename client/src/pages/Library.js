@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import Navbar from "../components/Navbar";
-import OneLibrary from "../components/SingleLibrary";
+import SingleLibrary from "../components/SingleLibrary";
 import { GET_LIBRARY_BY_ID } from "../utils/query";
 
 export default function Library() {
@@ -11,6 +11,7 @@ export default function Library() {
   const singleLibrary = useQuery(GET_LIBRARY_BY_ID, {
     variables: { id: id },
   });
+
   return (
     <Box
       sx={{
@@ -30,16 +31,12 @@ export default function Library() {
         }}
       >
         {singleLibrary.loading ? (
-            <div>loading...</div>
+          <div>loading...</div>
         ) : (
-            <OneLibrary
-            singleLibrary={singleLibrary.data}
-            loading={singleLibrary.loading}
-            libraryId={id}
-            />)}
-            
-            </Box>
-            </Box>
+          <SingleLibrary singleLibrary={singleLibrary.data} libraryId={id} />
+        )}
+      </Box>
+    </Box>
   );
 }
 

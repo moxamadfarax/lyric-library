@@ -83,22 +83,9 @@ export const UPDATE_LIBRARY_NAME = gql`
 `;
 
 export const DELETE_LIBRARY = gql`
-  mutation deleteLibrary($id: ID!) {
-    deleteLibrary(id: $id) {
+  mutation Mutation($deleteLibraryId: ID!) {
+    deleteLibrary(id: $deleteLibraryId) {
       _id
-      name
-      owner {
-        _id
-        username
-        email
-      }
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
     }
   }
 `;

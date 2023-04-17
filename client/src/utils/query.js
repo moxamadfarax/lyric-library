@@ -58,11 +58,14 @@ export const GET_LIBRARY_BY_ID = gql`
   }
 `;
 
-export const GET_ALL_LIBRARIES = gql`
-  query GetAllLibraries {
-    getAllLibraries {
+export const GET_USER_LIBRARIES = gql`
+  query Query($id: ID!) {
+    getUserById(id: $id) {
       _id
-      name
+      libraries {
+        _id
+        name
+      }
     }
   }
 `;

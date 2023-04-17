@@ -48,7 +48,6 @@ function Search() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setLyrics(data.lyrics);
         setAlbumCover(data.thumbnail);
         setSongDetails({
@@ -61,7 +60,6 @@ function Search() {
       .finally(() => setIsLoading(false));
   };
   let profile = AuthService.getProfile();
-  console.log(profile);
   useEffect(() => {
     setLyrics("");
     setAlbumCover("");
@@ -114,8 +112,6 @@ function Search() {
             </Box>
           </Box>
         </Grid>
-
-        {isLoading ? renderLoading : console.log("Hello")}
         {!songDetails.title ? (
           <p></p>
         ) : (

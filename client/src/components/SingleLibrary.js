@@ -45,7 +45,7 @@ export default function SingleLibrary({ singleLibrary, libraryId }) {
             color: "#1DB954;",
           }}
         >
-          {singleLibrary.name}
+          {singleLibrary.getLibraryById.name}
         </Box>
         <List
           sx={{

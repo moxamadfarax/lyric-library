@@ -16,6 +16,7 @@ export default function SingleSong({ song, removeSong, libraryId }) {
   const [removeSongFromLibrary] = useMutation(REMOVE_SONG_FROM_LIBRARY);
   const removeSongHandler = async () => {
     removeSong(song._id);
+    
     try {
       await removeSongFromLibrary({
         variables: {
@@ -54,7 +55,7 @@ export default function SingleSong({ song, removeSong, libraryId }) {
           <ListItemButton>
             <ListItemText
               primary={song.trackName}
-              secondary={"artist: " + song._id}
+              secondary={"artist: " + song.artistName}
             />
           </ListItemButton>
         </ListItem>

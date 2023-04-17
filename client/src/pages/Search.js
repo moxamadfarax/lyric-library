@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
+import { CircularProgress } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -13,13 +14,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "../components/Navbar";
 import AuthService from "../utils/auth";
 import { ADD_SONG_TO_LIBRARY } from "../utils/mutation";
-import SimpleDialogDemo from "../components/dialog"
+import SimpleDialogDemo from "../components/dialog";
 import authService from "../utils/auth";
-import { GET_USER_LIBRARIES } from '../utils/query'
-import { useQuery } from '@apollo/client';
-
-
-
+import { GET_USER_LIBRARIES } from "../utils/query";
+import { useQuery } from "@apollo/client";
 
 const theme = createTheme({
   palette: {
@@ -42,12 +40,11 @@ function Search() {
   const [albumCover, setAlbumCover] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
   const [songDetails, setSongDetails] = useState({});
- 
-  
-  
+  const [songAvailable, setSongAvailable] = useState(false);
+
   const userId = authService.getProfile();
   const { loading, data } = useQuery(GET_USER_LIBRARIES, {
-      variables: { id: userId.data._id },
+    variables: { id: userId.data._id },
   });
 
   const handleGetLyrics = () => {
@@ -69,17 +66,18 @@ function Search() {
         });
       })
       .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        setSongAvailable(true);
+      });
   };
   let profile = AuthService.getProfile();
-
   const song = {
     ...songDetails,
     artistName,
     albumCover,
-    lyrics
-  }
-
+    lyrics,
+  };
   useEffect(() => {
     setLyrics("");
     setAlbumCover("");
@@ -91,101 +89,133 @@ function Search() {
       {loading ? (
         <Box>loading</Box>
       ) : (
-      <Grid container>
-        <CssBaseline />
-        {profile && <Navbar username={`Welcome ${profile.data.username}`} />}
-        {!profile && <Navbar username={""} />}
-        <Grid item xs={12} md={4}>
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography component="h1" variant="h5">
-              Search Song Lyrics
-            </Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                fullWidth
-                label="Song Title"
-                value={songTitle}
-                onChange={(e) => setSongTitle(e.target.value)}
-                sx={{ backgroundColor: "#1f1f1f" }}
-              />
-              <TextField
-                margin="normal"
-                fullWidth
-                label="Artist Name"
-                value={artistName}
-                onChange={(e) => setArtistName(e.target.value)}
-                sx={{ backgroundColor: "#1f1f1f" }}
-              />
-              <Button
-                onClick={handleGetLyrics}
-                fullWidth
-                variant="contained"
-                sx={{ mt: 2, mb: 2 }}
-              >
-                Get Lyrics
-              </Button>
-              
-              <SimpleDialogDemo libraries={data.getUserById.libraries} songDetails={song}/>
-            </Box>
-          </Box>
-        </Grid>
-        {!songDetails.title ? (
-          <p></p>
-        ) : (
-          <Grid item xs={12} md={8}>
-            <Card
+        <Grid container>
+          <CssBaseline />
+          {profile && <Navbar username={`Welcome ${profile.data.username}`} />}
+          {!profile && <Navbar username={""} />}
+          <Grid item xs={12} md={4}>
+            <Box
               sx={{
                 my: 8,
                 mx: 4,
                 display: "flex",
                 flexDirection: "column",
+                alignItems: "center",
               }}
             >
-              <CardMedia
-                component="img"
-                alt="Album cover"
-                height="300"
-                sx={{ mt: 5, mb: 5, objectFit: "contain" }}
-                image={albumCover}
-              />
-              <CardContent>
-                <Typography variant="h4" component="h1">
-                  {songDetails.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Release Date: {songDetails.releaseDate}
-                </Typography>
-                <Typography
-                  variant="h5"
-                  component="h2"
-                  color="text.secondary"
+              <Typography component="h1" variant="h5">
+                Search Song Lyrics
+              </Typography>
+              <Box component="form" noValidate sx={{ mt: 1 }}>
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  label="Song Title"
+                  value={songTitle}
+                  onChange={(e) => setSongTitle(e.target.value)}
+                  sx={{ backgroundColor: "#1f1f1f" }}
+                />
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  label="Artist Name"
+                  value={artistName}
+                  onChange={(e) => setArtistName(e.target.value)}
+                  sx={{ backgroundColor: "#1f1f1f" }}
+                />
+                <Button
+                  onClick={handleGetLyrics}
+                  fullWidth
+                  variant="contained"
                   sx={{ mt: 2, mb: 2 }}
                 >
-                  {songDetails.artist}
-                </Typography>
-                <Box
+                  Get Lyrics
+                </Button>
+                {songDetails.title ? (
+                  <SimpleDialogDemo
+                    libraries={data.getUserById.libraries}
+                    songDetails={song}
+                  />
+                ) : null}
+              </Box>
+            </Box>
+          </Grid>
+          {!songDetails.title ? (
+            isLoading ? (
+              <Grid item xs={12} md={8}>
+                <Card
                   sx={{
-                    maxWidth: "auto",
-                    maxHeight: 300,
-                    overflow: "auto",
+                    my: 8,
+                    mx: 4,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "69em",
                   }}
                 >
-                  <pre>{lyrics}</pre>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-      </Grid>)}
+                  <Box
+                    sx={{
+                      textAlign: "center",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      paddingTop: "34em",
+                    }}
+                  >
+                    <CircularProgress size={50} />
+                  </Box>
+                </Card>
+              </Grid>
+            ) : (
+              <p></p>
+            )
+          ) : (
+            <Grid item xs={12} md={8}>
+              <Card
+                sx={{
+                  my: 8,
+                  mx: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "69em",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  alt="Album cover"
+                  height="400"
+                  sx={{ mt: 5, mb: 5, objectFit: "contain" }}
+                  image={albumCover}
+                />
+                <CardContent>
+                  <Typography variant="h4" component="h1">
+                    {songDetails.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Release Date: {songDetails.releaseDate}
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    component="h2"
+                    color="text.secondary"
+                    sx={{ mt: 2, mb: 2 }}
+                  >
+                    {songDetails.artist}
+                  </Typography>
+                  <Box
+                    sx={{
+                      maxWidth: "auto",
+                      maxHeight: 500,
+                      overflow: "auto",
+                    }}
+                  >
+                    <pre>{lyrics}</pre>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+        </Grid>
+      )}
     </ThemeProvider>
   );
 }

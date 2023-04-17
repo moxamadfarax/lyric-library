@@ -30,6 +30,7 @@ export default function SingleSong({ song, removeSong, libraryId }) {
       console.log("error");
     }
   };
+  console.log(song);
   return (
     <List
       sx={{
@@ -55,7 +56,7 @@ export default function SingleSong({ song, removeSong, libraryId }) {
           <ListItemButton>
             <ListItemText
               primary={song.trackName}
-              secondary={"artist: " + song.artistName}
+              secondary={"Artist Name: " + song.artistName}
             />
           </ListItemButton>
         </ListItem>

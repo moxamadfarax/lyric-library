@@ -9,31 +9,32 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
+
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+
 import { useMutation } from "@apollo/client";
 import { ADD_SONG_TO_LIBRARY } from "../utils/mutation";
 
 function SimpleDialog(props) {
   const [addSongToLibrary, { error }] = useMutation(ADD_SONG_TO_LIBRARY);
   const libraries = props.libraries;
-  console.log(libraries);
-
+  console.log(props.songDetails);
   const { onClose, selectedValue, open } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = async (value) => {
+  const handleListItemClick = async (value, libraryId) => {
     try {
       await addSongToLibrary({
         variables: {
-          libraryId: "643d7779f274e630b9c43c0d",
+          libraryId: libraryId,
           input: {
-            artistName: "unique",
-            lyrics: "afdsf",
-            songPhoto: "afdsfads",
-            trackName: "asdfasdf",
+            artistName: props.songDetails.artist,
+            lyrics: props.songDetails.lyrics,
+            songPhoto: props.songDetails.albumCover,
+            trackName: props.songDetails.title,
           },
         },
       });
@@ -51,7 +52,7 @@ function SimpleDialog(props) {
         {libraries.map((library) => (
           <ListItem disableGutters>
             <ListItemButton
-              onClick={() => handleListItemClick(library.name)}
+              onClick={() => handleListItemClick(library.name, library._id)}
               key={library.name}
             >
               <ListItemAvatar>
@@ -74,7 +75,7 @@ SimpleDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired,
 };
 
-export default function SimpleDialogDemo({ libraries }) {
+export default function SimpleDialogDemo({ libraries, songDetails }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(libraries[0].name);
 
@@ -102,6 +103,7 @@ export default function SimpleDialogDemo({ libraries }) {
         open={open}
         onClose={handleClose}
         libraries={libraries}
+        songDetails={songDetails}
       />
     </div>
   );

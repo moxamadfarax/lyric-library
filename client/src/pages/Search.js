@@ -64,14 +64,20 @@ function Search() {
           artist: data.artist,
           releaseDate: data.releaseDate,
         });
-        setSongAvailable(true);
       })
       .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+        setSongAvailable(true);
+      });
   };
   let profile = AuthService.getProfile();
-  console.log(profile);
-
+  const song = {
+    ...songDetails,
+    artistName,
+    albumCover,
+    lyrics,
+  };
   useEffect(() => {
     setLyrics("");
     setAlbumCover("");
@@ -125,9 +131,12 @@ function Search() {
                 >
                   Get Lyrics
                 </Button>
-                {songAvailable && (
-                  <SimpleDialogDemo libraries={data.getUserById.libraries} />
-                )}
+                {songDetails.title ? (
+                  <SimpleDialogDemo
+                    libraries={data.getUserById.libraries}
+                    songDetails={song}
+                  />
+                ) : null}
               </Box>
             </Box>
           </Grid>

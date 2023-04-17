@@ -25,38 +25,10 @@ export const LOGIN_USER = gql`
 `;
 
 export const CREATE_LIBRARY = gql`
-  mutation CreateLibrary($input: CreateLibraryInput!) {
-    createLibrary(input: $input) {
+  mutation Mutation($userId: ID!, $input: CreateLibraryInput!) {
+    createUserLibrary(userId: $userId, input: $input) {
       _id
       name
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
-    }
-  }
-`;
-
-export const ADD_LIBRARY_TO_USER = gql`
-  mutation addLibraryToUser($name: String!) {
-    addLibraryToUser(input: { name: $name }) {
-      _id
-      name
-      owner {
-        _id
-        username
-        email
-      }
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
     }
   }
 `;

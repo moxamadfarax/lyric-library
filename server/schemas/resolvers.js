@@ -14,7 +14,7 @@ const resolvers = {
       return await Songs.findById(id);
     },
     getAllUsers: async () => {
-      return await Users.find();
+      return await Users.find().populate("libraries");
     },
     getAllLibraries: async () => {
       return await Library.find().populate("songs");
@@ -74,11 +74,6 @@ const resolvers = {
         console.log(err);
       }
     },
-    createLibrary: async (_, { input }) => {
-      const library = new Library(input);
-      await library.save();
-      return library;
-    },
     deleteLibrary: async function (_, { libraryId }) {
       try {
         const library = await Library.findOneAndDelete(libraryId);
@@ -86,6 +81,23 @@ const resolvers = {
           throw new Error("Library not found");
         }
         return console.log("Library deleted");
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    createUserLibrary: async function (_, { userId, input }) {
+      console.log(userId);
+      try {
+        const user = await Users.findById(userId);
+        if (!user) {
+          throw new Error("User not found");
+        }
+        const library = new Library(input);
+        library.owner = userId;
+        await library.save();
+        user.libraries.push(library);
+        await user.save();
+        return library.populate("songs");
       } catch (err) {
         console.log(err);
       }

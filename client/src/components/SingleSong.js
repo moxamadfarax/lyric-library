@@ -54,7 +54,8 @@ export default function SingleSong({ song, removeSong, libraryId }) {
           <ListItemButton>
             <ListItemText
               primary={song.trackName}
-              secondary={"artist: " + song._id}
+              secondary={"Artist: " + song.artistName}
+              tertiary={"Artist: " + song.releaseDate}
             />
           </ListItemButton>
         </ListItem>

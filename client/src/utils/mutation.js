@@ -83,22 +83,9 @@ export const UPDATE_LIBRARY_NAME = gql`
 `;
 
 export const DELETE_LIBRARY = gql`
-  mutation deleteLibrary($id: ID!) {
-    deleteLibrary(id: $id) {
+  mutation Mutation($deleteLibraryId: ID!) {
+    deleteLibrary(id: $deleteLibraryId) {
       _id
-      name
-      owner {
-        _id
-        username
-        email
-      }
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
     }
   }
 `;
@@ -139,22 +126,9 @@ export const ADD_SONG_TO_LIBRARY = gql`
 `;
 
 export const REMOVE_SONG_FROM_LIBRARY = gql`
-  mutation removeSongFromLibrary($libraryId: ID!, $songId: ID!) {
+  mutation Mutation($libraryId: ID!, $songId: ID!) {
     removeSongFromLibrary(libraryId: $libraryId, songId: $songId) {
       _id
-      name
-      owner {
-        _id
-        username
-        email
-      }
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
     }
   }
 `;

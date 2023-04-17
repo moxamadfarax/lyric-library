@@ -55,11 +55,12 @@ export const UPDATE_LIBRARY_NAME = gql`
 `;
 
 export const DELETE_LIBRARY = gql`
-  mutation Mutation($deleteLibraryId: ID!) {
-    deleteLibrary(id: $deleteLibraryId) {
-      _id
-    }
+mutation Mutation($id: ID!) { 
+  deleteLibrary(id: $id) {
+    _id
+    name
   }
+}
 `;
 
 export const ADD_SONG_TO_LIBRARY = gql`

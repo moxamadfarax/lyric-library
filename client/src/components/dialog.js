@@ -13,10 +13,22 @@ import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
+import authService from "../utils/auth";
+import { GET_USER_LIBRARIES } from '../utils/query'
+import { useQuery } from '@apollo/client';
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];
 
 function SimpleDialog(props) {
+    const userId = authService.getProfile();
+    const { loading, data } = useQuery(GET_USER_LIBRARIES, {
+        variables: { id: userId.data._id },
+      });
+
+
+if (!loading) {
+    
+}
   const { onClose, selectedValue, open } = props;
 
   const handleClose = () => {

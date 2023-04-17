@@ -15,6 +15,7 @@ import AuthService from "../utils/auth";
 import { ADD_SONG_TO_LIBRARY } from "../utils/mutation";
 import SimpleDialogDemo from "../components/dialog"
 
+
 const theme = createTheme({
   palette: {
     mode: "dark",
@@ -43,17 +44,17 @@ function Search() {
     //   console.log('hi');
     // } 
     try {
-      await addSongToLibrary({
-        variables: {
-          libraryId: "643d7779f274e630b9c43c0d",
-          input: {
-            artistName: "unique",
-            lyrics: "afdsf",
-            songPhoto: "afdsfads",
-            trackName: "asdfasdf"
-          },
-        }
-      })
+      // await addSongToLibrary({
+      //   variables: {
+      //     libraryId: "643d7779f274e630b9c43c0d",
+      //     input: {
+      //       artistName: "unique",
+      //       lyrics: "afdsf",
+      //       songPhoto: "afdsfads",
+      //       trackName: "asdfasdf"
+      //     },
+      //   }
+      // })
     } catch (err) {
       console.log(err);
       console.log(error);

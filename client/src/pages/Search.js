@@ -14,6 +14,11 @@ import Navbar from "../components/Navbar";
 import AuthService from "../utils/auth";
 import { ADD_SONG_TO_LIBRARY } from "../utils/mutation";
 import SimpleDialogDemo from "../components/dialog"
+import authService from "../utils/auth";
+import { GET_USER_LIBRARIES } from '../utils/query'
+import { useQuery } from '@apollo/client';
+
+
 
 
 const theme = createTheme({
@@ -37,35 +42,13 @@ function Search() {
   const [albumCover, setAlbumCover] = useState("");
   const [releaseDate, setReleaseDate] = useState("");
   const [songDetails, setSongDetails] = useState({});
-  const [addSongToLibrary, { error }] = useMutation(ADD_SONG_TO_LIBRARY);
-
-  const handleAddToLibrary = async () => {
-    // if (!songDetails.title && !songDetails.artist && !songDetails.releaseDate) {
-    //   console.log('hi');
-    // } 
-    try {
-      // await addSongToLibrary({
-      //   variables: {
-      //     libraryId: "643d7779f274e630b9c43c0d",
-      //     input: {
-      //       artistName: "unique",
-      //       lyrics: "afdsf",
-      //       songPhoto: "afdsfads",
-      //       trackName: "asdfasdf"
-      //     },
-      //   }
-      // })
-    } catch (err) {
-      console.log(err);
-      console.log(error);
-    }
-}
-
-  const renderLoading = () => {
-    return <p>Loading...</p>;
-  };
-
-
+ 
+  
+  
+  const userId = authService.getProfile();
+  const { loading, data } = useQuery(GET_USER_LIBRARIES, {
+      variables: { id: userId.data._id },
+  });
 
   const handleGetLyrics = () => {
     setIsLoading(true);
@@ -97,6 +80,9 @@ function Search() {
 
   return (
     <ThemeProvider theme={theme}>
+      {loading ? (
+        <Box>loading</Box>
+      ) : (
       <Grid container>
         <CssBaseline />
         <Navbar username={"Example Username"} />
@@ -138,15 +124,8 @@ function Search() {
               >
                 Get Lyrics
               </Button>
-              <Button
-                onClick={handleAddToLibrary}
-                fullWidth
-                variant="contained"
-                sx={{ mt: 2, mb: 2, marginTop: '0px' }}
-              >
-                Add song to a library
-              </Button>
-              <SimpleDialogDemo />
+              
+              <SimpleDialogDemo libraries={data.getUserById.libraries} />
             </Box>
           </Box>
         </Grid>
@@ -197,7 +176,7 @@ function Search() {
             </Card>
           </Grid>
         )}
-      </Grid>
+      </Grid>)}
     </ThemeProvider>
   );
 }

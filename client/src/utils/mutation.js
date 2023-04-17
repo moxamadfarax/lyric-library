@@ -38,11 +38,6 @@ export const UPDATE_LIBRARY_NAME = gql`
     updateLibraryName(id: $id, name: $name) {
       _id
       name
-      owner {
-        _id
-        username
-        email
-      }
       songs {
         _id
         trackName
@@ -55,25 +50,24 @@ export const UPDATE_LIBRARY_NAME = gql`
 `;
 
 export const DELETE_LIBRARY = gql`
-mutation Mutation($id: ID!) { 
-  deleteLibrary(id: $id) {
-    _id
-    name
+  mutation Mutation($id: ID!) {
+    deleteLibrary(id: $id) {
+      name
+    }
   }
-}
 `;
 
 export const ADD_SONG_TO_LIBRARY = gql`
   mutation Mutation($libraryId: ID!, $input: CreateSongInput!) {
-  addSongToLibrary(libraryId: $libraryId, input: $input) {
-    _id
-    name
-    songs {
+    addSongToLibrary(libraryId: $libraryId, input: $input) {
       _id
-      trackName
+      name
+      songs {
+        _id
+        trackName
+      }
     }
   }
-}
 `;
 
 export const REMOVE_SONG_FROM_LIBRARY = gql`

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { useMutation, useQuery } from "@apollo/client";
 import Navbar from "../components/Navbar";
 import Libraries from "../components/Libraries";
-import { GET_USER_LIBRARIES } from '../utils/query'
+import { GET_USER_LIBRARIES } from "../utils/query";
+import { CREATE_LIBRARY } from "../utils/mutation";
 import authService from "../utils/auth";
 
 function Profile() {
@@ -31,6 +32,7 @@ function Profile() {
           },
         },
       });
+      window.location.reload();
       console.log("library created");
     } catch (err) {
       console.log(err);

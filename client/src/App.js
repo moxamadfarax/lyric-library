@@ -8,7 +8,7 @@ import Search from "./pages/Search";
 import Library from "./pages/Library";
 
 const client = new ApolloClient({
-  uri: "/graphql",
+  uri: "https://lyric-library.herokuapp.com/graphql",
   cache: new InMemoryCache(),
   status400ForVariableCoercionErrors: true,
 });

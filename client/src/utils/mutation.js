@@ -92,38 +92,16 @@ mutation Mutation($id: ID!) {
 `;
 
 export const ADD_SONG_TO_LIBRARY = gql`
-  mutation addSongToLibrary(
-    $libraryId: ID!
-    $trackName: String!
-    $artistName: String!
-    $songPhoto: String!
-    $lyrics: String!
-  ) {
-    addSongToLibrary(
-      libraryId: $libraryId
-      input: {
-        trackName: $trackName
-        artistName: $artistName
-        songPhoto: $songPhoto
-        lyrics: $lyrics
-      }
-    ) {
+  mutation Mutation($libraryId: ID!, $input: CreateSongInput!) {
+  addSongToLibrary(libraryId: $libraryId, input: $input) {
+    _id
+    name
+    songs {
       _id
-      name
-      owner {
-        _id
-        username
-        email
-      }
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
+      trackName
     }
   }
+}
 `;
 
 export const REMOVE_SONG_FROM_LIBRARY = gql`

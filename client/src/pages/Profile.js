@@ -3,10 +3,8 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import { useMutation, useQuery } from "@apollo/client";
 import Navbar from "../components/Navbar";
 import Libraries from "../components/Libraries";
-import { GET_USER_LIBRARIES } from "../utils/query";
+import { GET_USER_LIBRARIES } from '../utils/query'
 import authService from "../utils/auth";
-import { CREATE_LIBRARY } from "../utils/mutation";
-import { useState } from "react";
 
 function Profile() {
   if (authService.getProfile() === null) {
@@ -55,8 +53,9 @@ function Profile() {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        display: "flex;",
+        flexDirection: "column;",
+        minHeight: "100vh;",
       }}
     >
       {loading ? (

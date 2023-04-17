@@ -10,91 +10,102 @@ import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import PersonIcon from '@mui/icons-material/Person';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import AddIcon from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
+import { Box } from "@mui/material";
 import { blue } from '@mui/material/colors';
-
-const emails = ['username@gmail.com', 'user02@gmail.com'];
+import { useMutation } from "@apollo/client";
+import { ADD_SONG_TO_LIBRARY } from "../utils/mutation";
 
 function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
+    const [addSongToLibrary, { error }] = useMutation(ADD_SONG_TO_LIBRARY);
+    const libraries = props.libraries
+    console.log(libraries);
 
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
+    const { onClose, selectedValue, open } = props;
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
+    const handleClose = () => {
+        onClose(selectedValue);
+    };
 
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem disableGutters>
-            <ListItemButton onClick={() => handleListItemClick(email)} key={email}>
-              <ListItemAvatar>
-                <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={email} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+    const handleListItemClick = async (value) => {
+       try {
+        await addSongToLibrary({
+            variables: {
+                libraryId: "643d7779f274e630b9c43c0d",
+                input: {
+                    artistName: "unique",
+                    lyrics: "afdsf",
+                    songPhoto: "afdsfads",
+                    trackName: "asdfasdf"
+                },
+            }
+        })
+        onClose(value);
+       } catch (err) {
+        console.error(error);
+        console.log(err);
+       }
+    };
 
-        <ListItem disableGutters>
-          <ListItemButton
-            autoFocus
-            onClick={() => handleListItemClick('addAccount')}
-          >
-            <ListItemAvatar>
-              <Avatar>
-                <AddIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Add account" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </Dialog>
-  );
+    return (
+        <Dialog onClose={handleClose} open={open}>
+            <DialogTitle>Choose a library to add to:</DialogTitle>
+            <List sx={{ pt: 0 }}>
+                {libraries.map((library) => (
+                    <ListItem disableGutters>
+                        <ListItemButton onClick={() => handleListItemClick(library.name)} key={library.name}>
+                            <ListItemAvatar>
+                                <ListItemAvatar>
+                                    <PlaylistAddIcon />
+                                </ListItemAvatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={library.name} />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+        </Dialog>
+    );
+
 }
 
 SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
 };
 
-export default function SimpleDialogDemo() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
+export default function SimpleDialogDemo({ libraries }) {
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(libraries[0].name);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-  const handleClose = (value) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
+    const handleClose = (value) => {
+        setOpen(false);
+        setSelectedValue(value);
+    };
 
-  return (
-    <div>
-      <Typography variant="subtitle1" component="div">
-        Selected: {selectedValue}
-      </Typography>
-      <br />
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open simple dialog
-      </Button>
-      <SimpleDialog
-        selectedValue={selectedValue}
-        open={open}
-        onClose={handleClose}
-      />
-    </div>
-  );
+    return (
+        <div>
+            <Button
+                onClick={handleClickOpen}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2, mb: 2, marginTop: '0px' }}
+            >
+                Add song to a library
+            </Button>
+            <SimpleDialog
+                selectedValue={selectedValue}
+                open={open}
+                onClose={handleClose}
+                libraries={libraries}
+            />
+        </div>
+    );
 }

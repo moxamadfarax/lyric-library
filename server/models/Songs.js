@@ -13,6 +13,9 @@ const songsSchema = new Schema({
     type: String,
     required: true,
   },
+  releaseData: {
+    type: String,
+  },
   lyrics: {
     type: String,
     required: true,

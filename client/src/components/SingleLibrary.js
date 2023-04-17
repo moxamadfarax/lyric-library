@@ -4,11 +4,12 @@ import {
   List,
 } from "@mui/material";
 import SingleSong from './SingleSong';
-export default function singleLibrary({ singleLibrary, loading, libraryId }) {
-console.log(singleLibrary);
-  const [songs, setSongs] = React.useState(singleLibrary.songs);
+
+export default function OneLibrary({ singleLibrary, libraryId }) {
+
+
+  const [songs, setSongs] = React.useState(singleLibrary.getLibraryById.songs);
   const removeSong = async (songId) => {
-    console.log('songState', songs[0]._id)
     try {
       const newSongList = songs.filter(song => song._id !== songId);
       console.log('newSongList', newSongList);

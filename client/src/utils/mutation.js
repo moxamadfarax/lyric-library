@@ -139,22 +139,9 @@ export const ADD_SONG_TO_LIBRARY = gql`
 `;
 
 export const REMOVE_SONG_FROM_LIBRARY = gql`
-  mutation removeSongFromLibrary($libraryId: ID!, $songId: ID!) {
+  mutation Mutation($libraryId: ID!, $songId: ID!) {
     removeSongFromLibrary(libraryId: $libraryId, songId: $songId) {
       _id
-      name
-      owner {
-        _id
-        username
-        email
-      }
-      songs {
-        _id
-        trackName
-        artistName
-        songPhoto
-        lyrics
-      }
     }
   }
 `;

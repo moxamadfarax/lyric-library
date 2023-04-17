@@ -17,18 +17,18 @@ import { REMOVE_SONG_FROM_LIBRARY } from "../utils/mutation"
 export default function SingleSong({ song, removeSong, libraryId }) {
     const [removeSongFromLibrary] = useMutation(REMOVE_SONG_FROM_LIBRARY);
     const removeSongHandler = async () => {
-        console.log('clicked song._id', song._id);
         removeSong(song._id);
         try {
             await removeSongFromLibrary({
                 variables: {
-                    libraryId: libraryId,
+                    libraryId,
                     songId: song._id
                 }
             })
             console.log('removed song')
         } catch (err) {
             console.log(err);
+            console.log('error')
         }
     }
     return (
@@ -53,7 +53,7 @@ export default function SingleSong({ song, removeSong, libraryId }) {
                     <ListItemButton>
                         <ListItemText
                             primary={song.trackName}
-                            secondary={"artist: " + song.artistName}
+                            secondary={"artist: " + song._id}
                         />
                     </ListItemButton>
                 </ListItem>

@@ -2,6 +2,7 @@
   "name": "mern-server",
   "version": "1.0.0",
   "description": "",
+  "homepage": "https://lyric-library.herokuapp.com/",
   "main": "server/server.js",
   "engines": {
     "node": "16.14.0"

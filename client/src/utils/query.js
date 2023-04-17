@@ -1,7 +1,5 @@
 import { gql } from "@apollo/client";
 
-
-
 export const GET_ALL_USERS = gql`
   query GetAllUsers {
     getAllUsers {
@@ -40,35 +38,14 @@ export const GET_LIBRARY_BY_ID = gql`
 `;
 
 export const GET_USER_LIBRARIES = gql`
-query GetUserLibraries($id: ID!) {
-  getUserLibraries(id: $id) {
-    _id
-    username
-    email
-    libraries {
-      _id
-      name
-    }
-  }
-}
-`;
-
-export const GET_USER_BY_ID = gql`
   query GetUserById($id: ID!) {
     getUserById(id: $id) {
       _id
       username
       email
-      library {
+      libraries {
         _id
         name
-        songs {
-          _id
-          trackName
-          artistName
-          songPhoto
-          lyrics
-        }
       }
     }
   }
@@ -99,14 +76,14 @@ export const GET_ALL_SONGS = gql`
 `;
 
 export const GET_ALL_LIBRARIES = gql`
-query Query {
-  getAllLibraries {
-    _id
-    name
-    songs {
+  query Query {
+    getAllLibraries {
       _id
-      trackName
+      name
+      songs {
+        _id
+        trackName
+      }
     }
   }
-}
-`
+`;

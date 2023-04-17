@@ -38,7 +38,7 @@ export default function Navbar({ username }) {
     setDrawerOpen(!drawerOpen);
   };
 
-  // Render links based on screen size
+  // Render links based on screen size and login status
   const renderLinks = () => {
     const isLoggedIn = authService.loggedIn();
     if (isSmallScreen) {
@@ -47,47 +47,67 @@ export default function Navbar({ username }) {
           anchor="top"
           open={drawerOpen}
           onClose={toggleDrawer}
-          sx={{ top: 0, height: "100vh" }}
+          sx={{ top: 0, height: "100vh", justifyContent: "space-between" }}
         >
-          <List sx={{ width: 250 }} onClick={toggleDrawer}>
-            <ListItem button>
-              <ListItemText primary="Search" />
-            </ListItem>
-            {!isLoggedIn ? (
-              <ListItem button component={Link} to="/signUp">
-                <ListItemText primary="Sign Up" />
-              </ListItem>
+          <List
+            sx={{ width: 250, justifyContent: "space-between" }}
+            onClick={toggleDrawer}
+          >
+            {isLoggedIn ? (
+              <>
+                <ListItem button component={Link} to="/profile">
+                  <ListItemText primary="Profile" />
+                </ListItem>
+                <ListItem button onClick={() => authService.logout()}>
+                  <ListItemText primary="Logout" />
+                </ListItem>
+              </>
             ) : (
-              <ListItem button onClick={() => authService.logout()}>
-                <ListItemText primary="Logout" />
-              </ListItem>
+              <>
+                <ListItem button component={Link} to="/signIn">
+                  <ListItemText primary="Sign In" />
+                </ListItem>
+                <ListItem button component={Link} to="/signUp">
+                  <ListItemText primary="Sign Up" />
+                </ListItem>
+              </>
             )}
           </List>
         </Drawer>
       );
     } else {
       return (
-        <Stack direction="row" spacing={2}>
-          <Button color="inherit" component={Link} to="/profile">
-            Profile
-          </Button>
-          {!isLoggedIn ? (
-            <Button color="inherit" component={Link} to="/signUp">
-              Sign Up
-            </Button>
-          ) : (
-            <Button color="inherit" onClick={() => authService.logout()}>
-              Logout
-            </Button>
-          )}
-        </Stack>
+        <div sx={{ marginLeft: "auto", textAlign: "end" }}>
+          <Stack direction="row" spacing={2}>
+            {isLoggedIn && (
+              <>
+                <Button color="inherit" component={Link} to="/profile">
+                  Profile
+                </Button>
+                <Button color="inherit" onClick={() => authService.logout()}>
+                  Logout
+                </Button>
+              </>
+            )}
+            {!isLoggedIn && (
+              <>
+                <Button color="inherit" component={Link} to="/signIn">
+                  Sign In
+                </Button>
+                <Button color="inherit" component={Link} to="/signUp">
+                  Sign Up
+                </Button>
+              </>
+            )}
+          </Stack>
+        </div>
       );
     }
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar theme={theme}>
+    <AppBar position="static" sx={{ justifyContent: "space-between" }}>
+      <Toolbar theme={theme} sx={{ justifyContent: "space-between" }}>
         <Button component={Link} to="/" edge="start">
           <IconButton
             size="large"
@@ -97,7 +117,7 @@ export default function Navbar({ username }) {
           >
             <LibraryMusicIcon />
           </IconButton>
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="div" sx={{ color: "white" }}>
             LYRIC LIBRARY
           </Typography>
         </Button>

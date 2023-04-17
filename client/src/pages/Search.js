@@ -72,6 +72,8 @@ function Search() {
       .finally(() => setIsLoading(false));
   };
   let profile = AuthService.getProfile();
+  console.log(profile);
+
   useEffect(() => {
     setLyrics("");
     setAlbumCover("");
@@ -85,7 +87,8 @@ function Search() {
       ) : (
       <Grid container>
         <CssBaseline />
-        <Navbar username={"Example Username"} />
+        {profile && <Navbar username={`Welcome ${profile.data.username}`} />}
+        {!profile && <Navbar username={""} />}
         <Grid item xs={12} md={4}>
           <Box
             sx={{

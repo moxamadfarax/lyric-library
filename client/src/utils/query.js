@@ -43,26 +43,29 @@ export const GET_ALL_USERS = gql`
 `;
 
 export const GET_LIBRARY_BY_ID = gql`
-  query GetLibraryById($id: ID!) {
+  query Query($id: ID!) {
     getLibraryById(id: $id) {
       _id
       name
       songs {
-        _id
-        trackName
         artistName
-        songPhoto
         lyrics
+        trackName
+        songPhoto
+        _id
       }
     }
   }
 `;
 
-export const GET_ALL_LIBRARIES = gql`
-  query GetAllLibraries {
-    getAllLibraries {
+export const GET_USER_LIBRARIES = gql`
+  query Query($id: ID!) {
+    getUserById(id: $id) {
       _id
-      name
+      libraries {
+        _id
+        name
+      }
     }
   }
 `;

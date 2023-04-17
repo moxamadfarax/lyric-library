@@ -74,7 +74,9 @@ app.get("/lyrics", (req, res) => {
       res.status(500).send("Error fetching lyrics");
     });
 });
-
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/public/index.html"));
+});
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app });

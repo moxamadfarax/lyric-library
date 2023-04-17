@@ -130,93 +130,99 @@ export default function Libraries({ libraries }) {
       >
         My libraries
       </Box>
-      {libArray.map((library) => {
-        return (
-          <Box
-            key={library.id}
-            sx={{
-              display: "flex;",
-              alignItems: "center;",
-            }}
-          >
-            <Button
+      {libArray.length > 0 ? (
+        libArray.map((library) => {
+          return (
+            <Box
+              key={library.id}
               sx={{
-                color: "white;",
-                marginBottom: "10px;",
-                bgcolor: "#1D1B1B;",
-                width: "30vw",
                 display: "flex;",
                 alignItems: "center;",
               }}
-              href={"profile/" + library._id}
             >
-              {library.name}
-            </Button>
-            <IconButton
-              id="positioned-demo-button"
-              aria-controls={openMenu ? "positioned-demo-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={openMenu ? "true" : undefined}
-              variant="outlined"
-              color="neutral"
-              onClick={handleClickMenu}
-              placement="bottom"
-              data-libraryId={library._id}
-            >
-              <MoreVert />
-            </IconButton>
-            <Box sx={{ display: "flex", alignItems: "top" }}>
-              <Menu
-                id="positioned-demo-menu"
-                anchorEl={menuAnchorEl}
-                open={openMenu}
-                onClose={handleCloseMenu}
-                aria-labelledby="positioned-demo-button"
+              <Button
+                sx={{
+                  color: "white;",
+                  marginBottom: "10px;",
+                  bgcolor: "#1D1B1B;",
+                  width: "30vw",
+                  display: "flex;",
+                  alignItems: "center;",
+                }}
+                href={"profile/" + library._id}
               >
-                <MenuItem Display={""} onClick={handleClickOpen}>
-                  <ListItemDecorator>
-                    <Edit />
-                  </ListItemDecorator>{" "}
-                </MenuItem>
-                <Dialog open={openDialog} onClose={handleCloseDialog}>
-                  <DialogTitle>Edit Library</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText>
-                      Please enter your new library name:
-                    </DialogContentText>
-                    <TextField
-                      margin="dense"
-                      id="renamelibrary"
-                      label="library"
-                      type="text"
-                      fullWidth
-                      variant="standard"
-                      onChange={handleInputChange}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleCloseDialog}>Cancel</Button>
-                    <Button type="submit" onClick={renameLibraryHandler}>
-                      Submit
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-                <ListDivider />
-                <MenuItem
-                  data-libraryId={library._id}
-                  onClick={deleteLibraryHandler}
-                  variant="soft"
-                  color="danger"
+                {library.name}
+              </Button>
+              <IconButton
+                id="positioned-demo-button"
+                aria-controls={openMenu ? "positioned-demo-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openMenu ? "true" : undefined}
+                variant="outlined"
+                color="neutral"
+                onClick={handleClickMenu}
+                placement="bottom"
+                data-libraryId={library._id}
+              >
+                <MoreVert />
+              </IconButton>
+              <Box sx={{ display: "flex", alignItems: "top" }}>
+                <Menu
+                  id="positioned-demo-menu"
+                  anchorEl={menuAnchorEl}
+                  open={openMenu}
+                  onClose={handleCloseMenu}
+                  aria-labelledby="positioned-demo-button"
                 >
-                  <ListItemDecorator sx={{ color: "inherit" }}>
-                    <DeleteForever />
-                  </ListItemDecorator>{" "}
-                </MenuItem>
-              </Menu>
+                  <MenuItem Display={""} onClick={handleClickOpen}>
+                    <ListItemDecorator>
+                      <Edit />
+                    </ListItemDecorator>{" "}
+                  </MenuItem>
+                  <Dialog open={openDialog} onClose={handleCloseDialog}>
+                    <DialogTitle>Edit Library</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText>
+                        Please enter your new library name:
+                      </DialogContentText>
+                      <TextField
+                        margin="dense"
+                        id="renamelibrary"
+                        label="library"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={handleInputChange}
+                      />
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleCloseDialog}>Cancel</Button>
+                      <Button type="submit" onClick={renameLibraryHandler}>
+                        Submit
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                  <ListDivider />
+                  <MenuItem
+                    data-libraryId={library._id}
+                    onClick={deleteLibraryHandler}
+                    variant="soft"
+                    color="danger"
+                  >
+                    <ListItemDecorator sx={{ color: "inherit" }}>
+                      <DeleteForever />
+                    </ListItemDecorator>{" "}
+                  </MenuItem>
+                </Menu>
+              </Box>
             </Box>
-          </Box>
-        );
-      })}
+          );
+        })
+      ) : (
+        <Box sx={{ color: "white", fontSize: "20px" }}>
+          You have no libraries
+        </Box>
+      )}
     </Box>
   );
 }

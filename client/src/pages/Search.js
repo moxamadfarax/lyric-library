@@ -13,7 +13,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "../components/Navbar";
 import AuthService from "../utils/auth";
 import { ADD_SONG_TO_LIBRARY } from "../utils/mutation";
-import SimpleDialogDemo from "../components/dialog"
+
+import SimpleDialogDemo from "../components/dialog";
 
 const theme = createTheme({
   palette: {
@@ -39,9 +40,6 @@ function Search() {
   const [addSongToLibrary, { error }] = useMutation(ADD_SONG_TO_LIBRARY);
 
   const handleAddToLibrary = async () => {
-    // if (!songDetails.title && !songDetails.artist && !songDetails.releaseDate) {
-    //   console.log('hi');
-    // } 
     try {
       await addSongToLibrary({
         variables: {
@@ -50,21 +48,19 @@ function Search() {
             artistName: "unique",
             lyrics: "afdsf",
             songPhoto: "afdsfads",
-            trackName: "asdfasdf"
+            trackName: "asdfasdf",
           },
-        }
-      })
+        },
+      });
     } catch (err) {
       console.log(err);
       console.log(error);
     }
-}
+  };
 
   const renderLoading = () => {
     return <p>Loading...</p>;
   };
-
-
 
   const handleGetLyrics = () => {
     setIsLoading(true);
@@ -88,6 +84,8 @@ function Search() {
       .finally(() => setIsLoading(false));
   };
   let profile = AuthService.getProfile();
+  console.log(profile);
+
   useEffect(() => {
     setLyrics("");
     setAlbumCover("");
@@ -98,7 +96,8 @@ function Search() {
     <ThemeProvider theme={theme}>
       <Grid container>
         <CssBaseline />
-        <Navbar username={"Example Username"} />
+        {profile && <Navbar username={`Welcome ${profile.data.username}`} />}
+        {!profile && <Navbar username={""} />}
         <Grid item xs={12} md={4}>
           <Box
             sx={{
@@ -141,7 +140,7 @@ function Search() {
                 onClick={handleAddToLibrary}
                 fullWidth
                 variant="contained"
-                sx={{ mt: 2, mb: 2, marginTop: '0px' }}
+                sx={{ mt: 2, mb: 2, marginTop: "0px" }}
               >
                 Add song to a library
               </Button>

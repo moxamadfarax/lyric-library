@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { useMutation, useQuery } from "@apollo/client";
 import Navbar from "../components/Navbar";
@@ -8,8 +8,14 @@ import authService from "../utils/auth";
 import { CREATE_LIBRARY } from "../utils/mutation";
 import { useState } from "react";
 
-export default function Profile() {
+function Profile() {
+  if (authService.getProfile() === null) {
+    window.location.assign("/");
+  }
   const userId = authService.getProfile();
+  const username = userId.data.username;
+  console.log(username);
+  console.log(userId.data);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { loading, data } = useQuery(GET_USER_LIBRARIES, {
     variables: { id: userId.data._id },
@@ -42,6 +48,10 @@ export default function Profile() {
     setIsModalOpen(false);
   };
 
+  if (!userId) {
+    return null;
+  }
+
   return (
     <Box
       sx={{
@@ -59,7 +69,7 @@ export default function Profile() {
             minHeight: "100vh",
           }}
         >
-          <Navbar username={"Example Username"} />
+          <Navbar username={`Welcome ${username}`} />
           <Libraries libraries={data.getUserById.libraries} />
           <Button onClick={handleModalOpen}>Create Library</Button>
           <Modal
@@ -95,7 +105,7 @@ export default function Profile() {
                   handleModalClose();
                 }}
               >
-                Create
+                Create New Library
               </Button>
             </Box>
           </Modal>
@@ -104,3 +114,5 @@ export default function Profile() {
     </Box>
   );
 }
+
+export default Profile;

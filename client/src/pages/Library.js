@@ -4,9 +4,13 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import Navbar from "../components/Navbar";
 import SingleLibrary from "../components/SingleLibrary";
+import auth from "../utils/auth";
 import { GET_LIBRARY_BY_ID } from "../utils/query";
 
 export default function Library() {
+  if (auth.getProfile() === null) {
+    window.location.assign("/signIn");
+  }
   const { id } = useParams();
   const singleLibrary = useQuery(GET_LIBRARY_BY_ID, {
     variables: { id: id },

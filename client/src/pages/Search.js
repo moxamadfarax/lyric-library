@@ -72,7 +72,13 @@ function Search() {
       .finally(() => setIsLoading(false));
   };
   let profile = AuthService.getProfile();
-  console.log(profile);
+
+  const song = {
+    ...songDetails,
+    artistName,
+    albumCover,
+    lyrics
+  }
 
   useEffect(() => {
     setLyrics("");
@@ -128,7 +134,7 @@ function Search() {
                 Get Lyrics
               </Button>
               
-              <SimpleDialogDemo libraries={data.getUserById.libraries} />
+              <SimpleDialogDemo libraries={data.getUserById.libraries} songDetails={song}/>
             </Box>
           </Box>
         </Grid>

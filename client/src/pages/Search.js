@@ -42,7 +42,8 @@ function Search() {
   const [songDetails, setSongDetails] = useState({});
   const [songAvailable, setSongAvailable] = useState(false);
 
-  const userId = authService.getProfile();
+  const userId = authService.getProfile() || { data: { _id: null } };
+
   const { loading, data } = useQuery(GET_USER_LIBRARIES, {
     variables: { id: userId.data._id },
   });
@@ -131,12 +132,14 @@ function Search() {
                 >
                   Get Lyrics
                 </Button>
-                {songDetails.title ? (
-                  <SimpleDialogDemo
-                    libraries={data.getUserById.libraries}
-                    songDetails={song}
-                  />
-                ) : null}
+                {songDetails.title
+                  ? profile && (
+                      <SimpleDialogDemo
+                        libraries={data.getUserById.libraries}
+                        songDetails={song}
+                      />
+                    )
+                  : null}
               </Box>
             </Box>
           </Grid>

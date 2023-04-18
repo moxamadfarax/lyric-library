@@ -21,6 +21,10 @@ function SimpleDialog(props) {
   console.log(props.songDetails);
   const { onClose, selectedValue, open } = props;
 
+  if (!libraries) {
+    return <div>You have no libraries.</div>;
+  }
+
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -69,15 +73,15 @@ function SimpleDialog(props) {
   );
 }
 
-SimpleDialog.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+SimpleDialogDemo.defaultProps = {
+  libraries: [],
 };
 
 export default function SimpleDialogDemo({ libraries, songDetails }) {
+  const [selectedValue, setSelectedValue] = React.useState(
+    libraries.length ? libraries[0].name : ""
+  );
   const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(libraries[0].name);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,6 +91,10 @@ export default function SimpleDialogDemo({ libraries, songDetails }) {
     setOpen(false);
     setSelectedValue(value);
   };
+
+  if (libraries.length === 0) {
+    return <div>You have no libraries.</div>;
+  }
 
   return (
     <div>

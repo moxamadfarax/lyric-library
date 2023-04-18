@@ -46,6 +46,7 @@ export default function SignUp() {
       });
       const token = result.data.createUser.token;
       AuthService.login(token);
+      window.location.assign("/");
     } catch (e) {
       setError(e.message);
     }

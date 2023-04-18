@@ -9,7 +9,7 @@ import authService from "../utils/auth";
 
 function Profile() {
   if (authService.getProfile() === null) {
-    window.location.assign("/");
+    window.location.assign("/signIn");
   }
   const userId = authService.getProfile();
   const username = userId.data.username;

@@ -13,8 +13,6 @@ function Profile() {
   }
   const userId = authService.getProfile();
   const username = userId.data.username;
-  console.log(username);
-  console.log(userId.data);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { loading, data } = useQuery(GET_USER_LIBRARIES, {
     variables: { id: userId.data._id },
@@ -33,11 +31,7 @@ function Profile() {
         },
       });
       window.location.reload();
-      console.log("library created");
-    } catch (err) {
-      console.log(err);
-      console.log("error");
-    }
+    } catch (err) {}
   };
 
   const handleModalOpen = () => {

@@ -66,7 +66,9 @@ function Search() {
           releaseDate: data.releaseDate,
         });
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        return new Error(err);
+      })
       .finally(() => {
         setIsLoading(false);
         setSongAvailable(true);

@@ -41,8 +41,8 @@ export default function SignInSide() {
         variables: { email, password },
       });
       authService.login(data.login.token);
+      window.location.replace("/");
     } catch (e) {
-      console.error(e);
       setShowError(true);
     }
   };
@@ -134,7 +134,7 @@ export default function SignInSide() {
                     borderRadius: "4px",
                   }}
                 >
-                  Incorrect username or password.
+                  Incorrect email or password.
                 </Box>
               )}
               <Button

@@ -1,7 +1,7 @@
 const Users = require("../models/Users");
 const Library = require("../models/Library");
 const Songs = require("../models/Songs");
-const { signToken, authMiddleware, userCheck } = require("../utils/auth");
+const { signToken, userCheck } = require("../utils/auth");
 const resolvers = {
   Query: {
     getUserById: async (_, { id }) => {
@@ -54,6 +54,7 @@ const resolvers = {
       }
       try {
         const token = signToken(user);
+
         return { token, user };
       } catch (err) {
         return err;
@@ -71,7 +72,7 @@ const resolvers = {
         }
         return library.populate("songs");
       } catch (err) {
-        console.log(err);
+        return new Error(err);
       }
     },
     deleteLibrary: async function (_, { libraryId }) {
@@ -80,13 +81,12 @@ const resolvers = {
         if (!library) {
           throw new Error("Library not found");
         }
-        return console.log("Library deleted");
+        return;
       } catch (err) {
-        console.log(err);
+        return new Error(err);
       }
     },
     createUserLibrary: async function (_, { userId, input }) {
-      console.log(userId);
       try {
         const user = await Users.findById(userId);
         if (!user) {
@@ -99,7 +99,7 @@ const resolvers = {
         await user.save();
         return library.populate("songs");
       } catch (err) {
-        console.log(err);
+        return new Error(err);
       }
     },
     addSongToLibrary: async function (_, { libraryId, input }) {
@@ -119,7 +119,7 @@ const resolvers = {
         );
         return library.populate("songs");
       } catch (err) {
-        console.log(err);
+        return new Error(err);
       }
     },
     removeSongFromLibrary: async function (_, { libraryId, songId }) {
@@ -138,7 +138,7 @@ const resolvers = {
         );
         return library.populate("songs");
       } catch (err) {
-        console.log(err);
+        return new Error(err);
       }
     },
   },

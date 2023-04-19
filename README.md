@@ -20,10 +20,8 @@ This app uses [graphql](https://www.npmjs.com/package/graphql) and [apollo](http
 
 Below are some pictures of the application in use.
 
-![Page 1](client/public/img/REPLACEME)
-![Page 2](client/public/img/REPLACEME)
-![Page 3](client/public/img/REPLACEME)
-![Page 3](client/public/img/REPLACEME)
+![Page 1](client/assets//Screenshot%202023-04-18%20182808.png)
+![Page 2](client/assets//Screenshot%202023-04-18%20182936.png)
 
 ## Credits
 

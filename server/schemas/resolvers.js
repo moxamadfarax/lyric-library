@@ -13,12 +13,6 @@ const resolvers = {
     getSongById: async (_, { id }) => {
       return await Songs.findById(id);
     },
-    getAllUsers: async () => {
-      return await Users.find().populate("libraries");
-    },
-    getAllLibraries: async () => {
-      return await Library.find().populate("songs");
-    },
   },
   Mutation: {
     createUser: async function (_, { input }) {

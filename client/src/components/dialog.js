@@ -1,7 +1,6 @@
 import * as React from "react";
-import PropTypes from "prop-types";
+
 import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -16,9 +15,8 @@ import { useMutation } from "@apollo/client";
 import { ADD_SONG_TO_LIBRARY } from "../utils/mutation";
 
 function SimpleDialog(props) {
-  const [addSongToLibrary, { error }] = useMutation(ADD_SONG_TO_LIBRARY);
+  const [addSongToLibrary] = useMutation(ADD_SONG_TO_LIBRARY);
   const libraries = props.libraries;
-  console.log(props.songDetails);
   const { onClose, selectedValue, open } = props;
 
   if (!libraries) {
@@ -44,8 +42,7 @@ function SimpleDialog(props) {
       });
       onClose(value);
     } catch (err) {
-      console.error(error);
-      console.log(err);
+      throw new Error(err);
     }
   };
 

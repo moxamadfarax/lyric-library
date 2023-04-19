@@ -48,8 +48,6 @@ const typeDefs = gql`
 
   type Query {
     getUserById(id: ID!): User
-    getAllUsers: [User!]!
-    getAllLibraries: [Library!]!
     getLibraryById(id: ID!): Library
     getSongById(id: ID!): Song
   }
@@ -59,7 +57,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     createUserLibrary(userId: ID!, input: CreateLibraryInput!): Library
     updateLibraryName(id: ID!, name: String!): Library
-    deleteLibrary(id: ID!): Library                         
+    deleteLibrary(id: ID!): Library
     addSongToLibrary(libraryId: ID!, input: CreateSongInput!): Library
     removeSongFromLibrary(libraryId: ID!, songId: ID!): Library
   }

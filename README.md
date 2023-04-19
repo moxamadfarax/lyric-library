@@ -1,6 +1,7 @@
-# LyricLibrary
+# LyricLibrary [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Table of Contents
+
 - Description
 - Usage
 - Credits
@@ -8,26 +9,26 @@
 - Badges
 
 ## Decription
-We found much value in new technologies as well as previous Technologies used. Our MERN stack application uses React and Material UI for the front end. Server side we’ve taken advantage of GraphQL, Node, and Express. To round it out and tie things together we’ve employed a MongoDB and mongoose database. 
 
-We've deployed using Heroku.
+This app is a song lyric finder app. You can input a songs name and the name of the artist and get back some information about the song including the lyrics. we use the [genius-lyrics-api](https://docs.genius.com/) to fetch song data from. This app is built using the MERN stack. The front end is styled with [material ui](https://mui.com/). You are able to save songs that you search into a library of your choosing if you are logged in. If you are not logged in, you are still able to search songs on the home page.
 
-
-Brad and Christopher found their start in the front end; Christopher implementing material UI and Brad tying remaining elements and semantics together. Mohammed and Shane took charge in the back end; Mohammed setting up the server and schema files while Shane worked on file structure seeding and indexing the schemas. The Challenges we faced such as api issues, incorporating material UI, Faker, node modules, did not define us. Rather our Successes, like front end visual user experience, team flow, tenacious work attitude and timeless final class sessions.
+This app uses [graphql](https://www.npmjs.com/package/graphql) and [apollo](https://www.npmjs.com/package/apollo) server along with [mongoose](https://www.npmjs.com/package/mongoose) to query and mutate data in the backend. This app utilizes an array of technologies on the backend like [bcrypt](https://www.npmjs.com/package/bcrypt) for password hashing nad protection, [express](https://www.npmjs.com/package/express) for server hosting, and [dotenv](https://www.npmjs.com/package/dotenv) to protect api keys and sensitive information. This application uses [json web tokens](https://www.npmjs.com/package/jsonwebtoken) to send and store sensitive information about the user, namely whether or not they are logged in.
 
 ## Usage!
-// Link to deployed application
+
+[Here](https://lyric-library.herokuapp.com/) is the link to the deployed application on heroku.
+
+Below are some pictures of the application in use.
 
 ![Page 1](client/public/img/REPLACEME)
 ![Page 2](client/public/img/REPLACEME)
 ![Page 3](client/public/img/REPLACEME)
+![Page 3](client/public/img/REPLACEME)
 
 ## Credits
-Work done by Brad Schoffman, Shane Popowski, Christopher Benjamin, and Mohamed Farah. TA - Emma, thank you.
+
+Work done by [Christopher Benjamin](https://github.com/chrisbchickin), and [Mohamed Farah](https://github.com/moxamadfarax).
 
 ## License
 
 MIT License
-
-## Badge
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

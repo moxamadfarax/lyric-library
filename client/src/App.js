@@ -10,7 +10,6 @@ import Library from "./pages/Library";
 const client = new ApolloClient({
   uri: "/graphql",
   cache: new InMemoryCache(),
-  status400ForVariableCoercionErrors: true,
 });
 
 function App() {

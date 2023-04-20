@@ -13,6 +13,8 @@ import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutation";
 import authService from "../utils/auth";
+import { Navigate } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -51,7 +53,7 @@ export default function SignInSide() {
     <ThemeProvider theme={theme}>
       <AppBar position="static" sx={{ alignItems: "center", height: "5vh" }}>
         <Toolbar theme={theme}>
-          <Link href="/" sx={{ textDecoration: "none", color: "white" }}>
+          <Link component={RouterLink} to="/" sx={{ textDecoration: "none", color: "white" }}>
             <IconButton edge="start" color="inherit" aria-label="logo">
               <LibraryMusicIcon sx={{ color: "#1DB954", fontSize: "1.5em" }} />
               <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
@@ -148,7 +150,7 @@ export default function SignInSide() {
               <Grid container justifyContent="center" sx={{ mt: 1 }}>
                 <Grid item>
                   <Link
-                    href="/signUp"
+                    component={RouterLink} to="/signUp"
                     variant="body2"
                     sx={{ textAlign: "center", textDecoration: "none" }}
                   >

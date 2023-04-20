@@ -26,10 +26,6 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
 }
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
-});
-
 app.get("/lyrics", (req, res) => {
   const { artist, title } = req.query;
   const searchUrl = `https://api.genius.com/search?q=${encodeURIComponent(
@@ -74,6 +70,10 @@ app.get("/lyrics", (req, res) => {
       res.status(500).send("Error fetching lyrics");
     });
 });
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();

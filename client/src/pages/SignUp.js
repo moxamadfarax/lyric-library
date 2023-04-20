@@ -12,6 +12,7 @@ import { AppBar, Toolbar, IconButton } from "@mui/material";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Link as RouterLink } from 'react-router-dom';
 
 import { CREATE_USER } from "../utils/mutation";
 import AuthService from "../utils/auth";
@@ -56,7 +57,7 @@ export default function SignUp() {
     <ThemeProvider theme={theme}>
       <AppBar position="static" sx={{ alignItems: "center", height: "5vh" }}>
         <Toolbar theme={theme}>
-          <Link href="/" sx={{ textDecoration: "none", color: "white" }}>
+          <Link component={RouterLink} to="/" sx={{ textDecoration: "none", color: "white" }}>
             <IconButton edge="start" color="inherit" aria-label="logo">
               <LibraryMusicIcon sx={{ color: "#1DB954", fontSize: "1.5em" }} />
               <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
@@ -144,7 +145,7 @@ export default function SignUp() {
             <Grid container justifyContent="center" sx={{ mt: 1 }}>
               <Grid item>
                 <Link
-                  href="/signIn"
+                  component={RouterLink} to="/signIn"
                   variant="body2"
                   sx={{ textAlign: "center", textDecoration: "none" }}
                 >

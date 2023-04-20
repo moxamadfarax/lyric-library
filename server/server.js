@@ -30,6 +30,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
 // app.get("/lyrics", (req, res) => {
 //   const { artist, title } = req.query;
 //   const searchUrl = `https://api.genius.com/search?q=${encodeURIComponent(

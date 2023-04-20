@@ -30,50 +30,50 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-app.get("/lyrics", (req, res) => {
-  const { artist, title } = req.query;
-  const searchUrl = `https://api.genius.com/search?q=${encodeURIComponent(
-    title + " " + artist
-  )}&per_page=1`;
+// app.get("/lyrics", (req, res) => {
+//   const { artist, title } = req.query;
+//   const searchUrl = `https://api.genius.com/search?q=${encodeURIComponent(
+//     title + " " + artist
+//   )}&per_page=1`;
 
-  fetch(searchUrl, {
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      const hit = data.response.hits[0];
+//   fetch(searchUrl, {
+//     headers: {
+//       Authorization: `Bearer ${apiKey}`,
+//     },
+//   })
+//     .then((res) => res.json())
+//     .then((data) => {
+//       console.log(data);
+//       const hit = data.response.hits[0];
 
-      const trackId = hit.result.id;
-      const title = hit.result.title;
-      const artist = hit.result.primary_artist.name;
-      const releaseDate = hit.result.release_date_for_display;
+//       const trackId = hit.result.id;
+//       const title = hit.result.title;
+//       const artist = hit.result.primary_artist.name;
+//       const releaseDate = hit.result.release_date_for_display;
 
-      getLyrics({
-        apiKey: apiKey,
-        title: title,
-        artist: artist,
-        optimizeQuery: false,
-        id: trackId,
-      }).then((lyrics) => {
-        res.send({
-          lyrics: lyrics,
-          artistName: artist,
-          songTitle: title,
-          thumbnail: hit.result.song_art_image_url,
-          title: title,
-          artist: artist,
-          releaseDate: releaseDate,
-        });
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error fetching lyrics");
-    });
-});
+//       getLyrics({
+//         apiKey: apiKey,
+//         title: title,
+//         artist: artist,
+//         optimizeQuery: false,
+//         id: trackId,
+//       }).then((lyrics) => {
+//         res.send({
+//           lyrics: lyrics,
+//           artistName: artist,
+//           songTitle: title,
+//           thumbnail: hit.result.song_art_image_url,
+//           title: title,
+//           artist: artist,
+//           releaseDate: releaseDate,
+//         });
+//       });
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       res.status(500).send("Error fetching lyrics");
+//     });
+// });
 
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();

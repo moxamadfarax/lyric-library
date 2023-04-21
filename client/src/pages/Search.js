@@ -30,6 +30,7 @@ const theme = createTheme({
     },
   },
 });
+const userId = authService.getProfile() || { data: { _id: null } };
 
 function Search() {
   const [lyrics, setLyrics] = useState("");
@@ -41,12 +42,10 @@ function Search() {
   const [songDetails, setSongDetails] = useState({});
   const [songAvailable, setSongAvailable] = useState(false);
 
-  const userId = authService.getProfile() || { data: { _id: null } };
-
   const { loading, data } = useQuery(GET_USER_LIBRARIES, {
     variables: { id: userId.data._id },
   });
-  console.log(loading, data);
+
   const handleGetLyrics = () => {
     setIsLoading(true);
 
@@ -194,9 +193,8 @@ function Search() {
                   <Typography variant="h4" component="h1">
                     {songDetails.title}
                   </Typography>
-
                   <Typography variant="body2" color="text.secondary">
-                    Release On: {songDetails.releaseDate}
+                    Release Date: {songDetails.releaseDate}
                   </Typography>
                   <Typography
                     variant="h5"

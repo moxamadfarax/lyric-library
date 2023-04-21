@@ -22,9 +22,8 @@ export const LOGIN_USER = gql`
 `;
 
 export const CREATE_LIBRARY = gql`
-  mutation Mutation($userId: ID!, $input: CreateLibraryInput!) {
+  mutation CreateLibrary($userId: ID!, $input: CreateLibraryInput!) {
     createUserLibrary(userId: $userId, input: $input) {
-      _id
       name
     }
   }

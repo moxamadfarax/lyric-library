@@ -46,7 +46,7 @@ function Search() {
   const { loading, data } = useQuery(GET_USER_LIBRARIES, {
     variables: { id: userId.data._id },
   });
-
+  console.log(loading, data);
   const handleGetLyrics = () => {
     setIsLoading(true);
 
@@ -194,8 +194,9 @@ function Search() {
                   <Typography variant="h4" component="h1">
                     {songDetails.title}
                   </Typography>
+
                   <Typography variant="body2" color="text.secondary">
-                    Release Date: {songDetails.releaseDate}
+                    Release On: {songDetails.releaseDate}
                   </Typography>
                   <Typography
                     variant="h5"
@@ -210,6 +211,7 @@ function Search() {
                       maxWidth: "auto",
                       maxHeight: 500,
                       overflow: "auto",
+                      fontSize: "20px",
                     }}
                   >
                     <pre>{lyrics}</pre>

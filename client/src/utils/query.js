@@ -17,8 +17,8 @@ export const GET_LIBRARY_BY_ID = gql`
 `;
 
 export const GET_USER_LIBRARIES = gql`
-  query GetUserById($id: ID!) {
-    getUserById(id: $id) {
+  query Query($getUserByIdId: ID!) {
+    getUserById(id: $getUserByIdId) {
       _id
       username
       email

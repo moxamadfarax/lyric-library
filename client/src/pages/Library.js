@@ -10,7 +10,6 @@ import { GET_LIBRARY_BY_ID } from "../utils/query";
 export default function Library() {
   if (auth.getProfile() === null) {
     window.location.assign("/signIn");
-    return;
   }
   const { id } = useParams();
   const singleLibrary = useQuery(GET_LIBRARY_BY_ID, {
